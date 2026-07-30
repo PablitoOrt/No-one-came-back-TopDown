@@ -22,14 +22,18 @@ public class WeaponAccuracyCalculator
         : 1f;
 
     // Call once per frame with the current aim direction to update steadiness.
-    public void Tick(Vector3 aimDirection, float deltaTime)
+    // steadyToleranceMultiplier scales how forgiving the steadiness check is -
+    // used by the aim-assist system so tracking a moving locked-on target keeps
+    // counting as steady instead of resetting every time the target shifts.
+    public void Tick(Vector3 aimDirection, float deltaTime, float steadyToleranceMultiplier = 1f)
     {
         if (hasLastAimDirection)
         {
             float angleDelta = Vector3.Angle(lastAimDirection, aimDirection);
-            float toleratedDelta = profile.SteadyTolerancePerSecond * deltaTime;
+            float toleratedDelta = profile.SteadyTolerancePerSecond * deltaTime * steadyToleranceMultiplier;
+            float breakAngle = profile.SteadyBreakAngle * steadyToleranceMultiplier;
 
-            if (angleDelta > profile.SteadyBreakAngle)
+            if (angleDelta > breakAngle)
             {
                 steadyTimer = 0f;
             }

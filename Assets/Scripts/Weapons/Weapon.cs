@@ -6,6 +6,13 @@ using UnityEngine.InputSystem;
 // a spread cone driven by WeaponAccuracyCalculator. Whether a shot actually
 // lands is decided entirely by that spread vs. the target's size/distance -
 // there is no separate hit-chance roll.
+//
+// All firing data (fire rate, damage, pellet count, ...) lives in a
+// WeaponDefinition asset rather than on this component, so different weapon
+// "types" (pistol, shotgun, rifle) are different assets, not different
+// classes. WeaponDefinition assets are shared, so any runtime-mutable state
+// a future weapon feature needs (e.g. current ammo) must live here on the
+// component instance, never added to WeaponDefinition itself.
 public class Weapon : MonoBehaviour
 {
     [Header("Input")]
@@ -17,14 +24,13 @@ public class Weapon : MonoBehaviour
     [SerializeField] private Transform muzzle;
     [SerializeField] private PlayerAimController aimController;
     [SerializeField] private PlayerStats wielderStats;
+    [Tooltip("Left empty, auto-resolved via GetComponent.")]
+    [SerializeField] private PlayerWeaponInventory inventory;
 
-    [Header("Accuracy")]
-    [SerializeField] private WeaponAccuracyProfile accuracyProfile;
+    [Header("Loadout")]
+    [SerializeField] private WeaponDefinition definition;
 
-    [Header("Firing")]
-    [SerializeField] private float fireRate = 2f;
-    [SerializeField] private float maxRange = 100f;
-    [SerializeField] private float damage = 10f;
+    [Header("Hit Detection")]
     [SerializeField] private LayerMask hitMask = ~0;
 
     [Header("Debug")]
@@ -34,6 +40,10 @@ public class Weapon : MonoBehaviour
     [SerializeField] private float debugRayLength = 15f;
     [SerializeField] private float debugShotTraceDuration = 1f;
 
+    // Fired once per trigger pull, before any pellets are resolved - the hook
+    // for muzzle flash/fire sound. ShotHit/ShotMissed fire once per pellet
+    // instead, for per-projectile impact effects.
+    public event Action WeaponFired;
     public event Action<RaycastHit> ShotHit;
     public event Action<Vector3, Vector3> ShotMissed;
 
@@ -41,30 +51,69 @@ public class Weapon : MonoBehaviour
     private WeaponAccuracyCalculator accuracyCalculator;
     private float nextFireTime;
 
-    public float CurrentSpreadAngle => accuracyCalculator.GetCurrentSpreadAngle(
-        wielderStats != null ? wielderStats.InjuryFactor : 0f,
-        wielderStats != null ? wielderStats.PsychosisFactor : 0f);
+    public WeaponDefinition Definition => definition;
 
-    public float SteadyProgress01 => accuracyCalculator.SteadyProgress01;
+    public float CurrentSpreadAngle => definition != null
+        ? accuracyCalculator.GetCurrentSpreadAngle(
+            wielderStats != null ? wielderStats.InjuryFactor : 0f,
+            wielderStats != null ? wielderStats.PsychosisFactor : 0f)
+        : 0f;
+
+    public float SteadyProgress01 => definition != null ? accuracyCalculator.SteadyProgress01 : 0f;
 
     private void Awake()
     {
-        accuracyCalculator = new WeaponAccuracyCalculator(accuracyProfile);
+        if (inventory == null) inventory = GetComponent<PlayerWeaponInventory>();
 
         InputActionMap map = inputActions.FindActionMap(actionMapName, throwIfNotFound: true);
         attackAction = map.FindAction(attackActionName, throwIfNotFound: true);
+
+        WeaponDefinition startingDefinition = definition;
+        definition = null;
+        if (startingDefinition != null) SetDefinition(startingDefinition);
     }
 
     private void OnEnable() => attackAction.Enable();
     private void OnDisable() => attackAction.Disable();
 
+    // Swaps in a new weapon: drops the currently equipped one (if any) as a
+    // world pickup, rebuilds the accuracy calculator for the new profile, and
+    // registers the new weapon as collected. Used both for the weapon
+    // assigned in the Inspector at startup and for pickups equipped in play.
+    public void EquipDefinition(WeaponDefinition newDefinition) => SetDefinition(newDefinition);
+
+    private void SetDefinition(WeaponDefinition newDefinition)
+    {
+        if (newDefinition == null || newDefinition == definition) return;
+
+        if (definition != null)
+        {
+            WeaponPickup.SpawnDropped(definition, transform.position);
+        }
+
+        definition = newDefinition;
+        accuracyCalculator = new WeaponAccuracyCalculator(definition.AccuracyProfile);
+        nextFireTime = 0f;
+
+        inventory?.MarkCollected(definition);
+    }
+
     private void Update()
     {
-        accuracyCalculator.Tick(aimController.AimDirection, Time.deltaTime);
+        if (definition == null) return;
 
-        if (attackAction.IsPressed() && Time.time >= nextFireTime)
+        float toleranceMultiplier = aimController.IsTargetLocked
+            ? definition.AccuracyProfile.AssistedSteadyToleranceMultiplier
+            : 1f;
+        accuracyCalculator.Tick(aimController.RawAimDirection, Time.deltaTime, toleranceMultiplier);
+
+        bool wantsToFire = definition.FireMode == WeaponFireMode.Automatic
+            ? attackAction.IsPressed()
+            : attackAction.WasPressedThisFrame();
+
+        if (wantsToFire && Time.time >= nextFireTime)
         {
-            nextFireTime = Time.time + 1f / fireRate;
+            nextFireTime = Time.time + 1f / definition.FireRate;
             Fire();
         }
 
@@ -74,13 +123,24 @@ public class Weapon : MonoBehaviour
     private void Fire()
     {
         Vector3 origin = muzzle.position;
-        Vector3 shotDirection = BallisticsUtility.ApplyConeSpread(aimController.AimDirection, CurrentSpreadAngle);
+        Vector3 centerDirection = BallisticsUtility.ApplyConeSpread(aimController.AimDirection, CurrentSpreadAngle);
 
-        if (Physics.Raycast(origin, shotDirection, out RaycastHit hit, maxRange, hitMask, QueryTriggerInteraction.Ignore))
+        WeaponFired?.Invoke();
+
+        for (int i = 0; i < definition.PelletsPerShot; i++)
+        {
+            Vector3 pelletDirection = BallisticsUtility.ApplyConeSpread(centerDirection, definition.PelletSpreadAngle);
+            FirePellet(origin, pelletDirection);
+        }
+    }
+
+    private void FirePellet(Vector3 origin, Vector3 direction)
+    {
+        if (Physics.Raycast(origin, direction, out RaycastHit hit, definition.MaxRange, hitMask, QueryTriggerInteraction.Ignore))
         {
             if (hit.collider.TryGetComponent(out IDamageable damageable))
             {
-                damageable.ApplyDamage(damage, hit.point, hit.normal);
+                damageable.ApplyDamage(definition.Damage, hit.point, hit.normal);
             }
 
             if (debugDraw) Debug.DrawLine(origin, hit.point, Color.green, debugShotTraceDuration);
@@ -88,8 +148,8 @@ public class Weapon : MonoBehaviour
         }
         else
         {
-            if (debugDraw) Debug.DrawRay(origin, shotDirection * maxRange, Color.red, debugShotTraceDuration);
-            ShotMissed?.Invoke(origin, shotDirection);
+            if (debugDraw) Debug.DrawRay(origin, direction * definition.MaxRange, Color.red, debugShotTraceDuration);
+            ShotMissed?.Invoke(origin, direction);
         }
     }
 
@@ -119,8 +179,10 @@ public class Weapon : MonoBehaviour
 
         string injury = wielderStats != null ? wielderStats.InjuryFactor.ToString("P0") : "n/a";
         string psychosis = wielderStats != null ? wielderStats.PsychosisFactor.ToString("P0") : "n/a";
+        string weaponName = definition != null ? definition.WeaponName : "none";
+        string lockState = aimController != null && aimController.IsTargetLocked ? "LOCKED" : "-";
 
-        GUI.Label(new Rect(10, 10, 320, 90),
-            $"Spread: {CurrentSpreadAngle:F1}°\nSteady aim: {SteadyProgress01:P0}\nInjury: {injury}\nPsychosis: {psychosis}");
+        GUI.Label(new Rect(10, 10, 320, 110),
+            $"Weapon: {weaponName}\nSpread: {CurrentSpreadAngle:F1}°\nSteady aim: {SteadyProgress01:P0}\nInjury: {injury}\nPsychosis: {psychosis}\nAim assist: {lockState}");
     }
 }

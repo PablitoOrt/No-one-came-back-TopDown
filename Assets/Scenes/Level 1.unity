@@ -393,6 +393,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BasicEnemy
   maxHealth: 30
+  aimAnchor: {fileID: 0}
   flashRenderers: []
   flashColor: {r: 1, g: 1, b: 1, a: 1}
   flashDuration: 0.12
@@ -710,6 +711,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BasicEnemy
   maxHealth: 30
+  aimAnchor: {fileID: 0}
   flashRenderers: []
   flashColor: {r: 1, g: 1, b: 1, a: 1}
   flashDuration: 0.12
@@ -1424,7 +1426,7 @@ GameObject:
   m_Component:
   - component: {fileID: 755094138}
   - component: {fileID: 755094137}
-  - component: {fileID: 755094136}
+  - component: {fileID: 755094139}
   m_Layer: 0
   m_Name: CinemachineCamera
   m_TagString: Untagged
@@ -1432,25 +1434,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &755094136
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 755094135}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b617507da6d07e749b7efdb34e1173e1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineFollow
-  TrackerSettings:
-    BindingMode: 4
-    PositionDamping: {x: 1, y: 1, z: 1}
-    AngularDampingMode: 0
-    RotationDamping: {x: 1, y: 1, z: 1}
-    QuaternionDamping: 1
-  FollowOffset: {x: 0, y: 11.55, z: -5.79}
 --- !u!114 &755094137
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1502,13 +1485,44 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 755094135}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.4909645, y: 0, z: 0, w: 0.8711796}
-  m_LocalPosition: {x: 7.42, y: 13.030001, z: -6.1}
+  m_LocalRotation: {x: 0.2905351, y: 0.6486153, z: -0.29509228, w: 0.6385986}
+  m_LocalPosition: {x: -2.9788718, y: 13.162856, z: 1.1609688}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 58.808, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 48.927, y: 90.892, z: 0}
+--- !u!114 &755094139
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 755094135}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 886251e9a18ece04ea8e61686c173e1b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachinePositionComposer
+  CameraDistance: 14.9
+  DeadZoneDepth: 0
+  Composition:
+    ScreenPosition: {x: 0.07760417, y: -0.04185128}
+    DeadZone:
+      Enabled: 1
+      Size: {x: 0.51, y: 0.9596301}
+    HardLimits:
+      Enabled: 0
+      Size: {x: 0.8, y: 0.9596301}
+      Offset: {x: 0, y: 0}
+  CenterOnActivate: 0
+  TargetOffset: {x: 0, y: 1, z: 0}
+  Damping: {x: 1, y: 1, z: 1}
+  Lookahead:
+    Enabled: 0
+    Time: 0
+    Smoothing: 0
+    IgnoreY: 0
 --- !u!1 &780899465
 GameObject:
   m_ObjectHideFlags: 0
@@ -1775,6 +1789,8 @@ GameObject:
   - component: {fileID: 1033545012}
   - component: {fileID: 1033545014}
   - component: {fileID: 1033545013}
+  - component: {fileID: 1033545016}
+  - component: {fileID: 1033545015}
   m_Layer: 0
   m_Name: Weapon
   m_TagString: Untagged
@@ -1815,10 +1831,8 @@ MonoBehaviour:
   muzzle: {fileID: 1033545012}
   aimController: {fileID: 1090467298}
   wielderStats: {fileID: 1090467297}
-  accuracyProfile: {fileID: 11400000, guid: 5ba6e73373a319249b7f7505ce26efab, type: 2}
-  fireRate: 2
-  maxRange: 100
-  damage: 10
+  inventory: {fileID: 0}
+  definition: {fileID: 11400000, guid: d27c1ca0aa628ad468090ebe671af22e, type: 2}
   hitMask:
     serializedVersion: 2
     m_Bits: 128
@@ -1846,6 +1860,52 @@ MonoBehaviour:
   aimCamera: {fileID: 1996980336}
   gamepadLookDeadzone: 0.2
   gamepadAimPointDistance: 50
+  enemyMask:
+    serializedVersion: 2
+    m_Bits: 128
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 256
+  assistRange: 5.7
+  acquireConeAngle: 6
+  breakConeAngle: 18
+  mouseAssistBendAngle: 9.31
+  gamepadAssistBendAngle: 15.26
+  targetReacquireInterval: 0.46
+  debugDraw: 1
+--- !u!114 &1033545015
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1033545011}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ea09e201b9af4e438a4d2fa85ff9e57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerWeaponInventory
+--- !u!114 &1033545016
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1033545011}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3222de0681158c7429579dbb576e5e7b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerInteractor
+  inputActions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  actionMapName: Player
+  interactActionName: Interact
+  interactOrigin: {fileID: 879582500}
+  interactRadius: 1.5
+  interactableMask:
+    serializedVersion: 2
+    m_Bits: 512
+  scanInterval: 0.1
   debugDraw: 1
 --- !u!1 &1090467295
 GameObject:
@@ -1923,6 +1983,18 @@ MonoBehaviour:
   aimCamera: {fileID: 1996980336}
   gamepadLookDeadzone: 0.2
   gamepadAimPointDistance: 50
+  enemyMask:
+    serializedVersion: 2
+    m_Bits: 0
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 0
+  assistRange: 12
+  acquireConeAngle: 6
+  breakConeAngle: 18
+  mouseAssistBendAngle: 0
+  gamepadAssistBendAngle: 10
+  targetReacquireInterval: 0.1
   debugDraw: 1
 --- !u!114 &1090467299
 MonoBehaviour:
@@ -2278,6 +2350,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BasicEnemy
   maxHealth: 30
+  aimAnchor: {fileID: 0}
   flashRenderers: []
   flashColor: {r: 1, g: 1, b: 1, a: 1}
   flashDuration: 0.12
@@ -2664,7 +2737,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!65 &1455679357
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2962,6 +3035,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BasicEnemy
   maxHealth: 30
+  aimAnchor: {fileID: 0}
   flashRenderers: []
   flashColor: {r: 1, g: 1, b: 1, a: 1}
   flashDuration: 0.12
@@ -3385,8 +3459,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1996980334}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.4909645, y: 0, z: 0, w: 0.8711796}
-  m_LocalPosition: {x: 7.42, y: 13.030001, z: -6.1}
+  m_LocalRotation: {x: 0.2905351, y: 0.6486153, z: -0.29509228, w: 0.6385986}
+  m_LocalPosition: {x: -2.9788718, y: 13.162856, z: 1.1609688}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

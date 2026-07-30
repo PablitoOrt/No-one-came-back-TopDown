@@ -7,11 +7,15 @@ using UnityEngine;
 // short knockback so misses/hits are obvious at a glance. It has no AI - it
 // doesn't move or attack on its own.
 [DisallowMultipleComponent]
-public class BasicEnemy : MonoBehaviour, IDamageable
+public class BasicEnemy : MonoBehaviour, IDamageable, ITargetable
 {
     [Header("Health")]
     [SerializeField] private float maxHealth = 30f;
     private float currentHealth;
+
+    [Header("Targeting")]
+    [Tooltip("Point the aim-assist system pulls toward. Left empty, falls back to this transform (usually the root/feet).")]
+    [SerializeField] private Transform aimAnchor;
 
     [Header("Hit Flash")]
     [Tooltip("Left empty, all renderers in children are used automatically.")]
@@ -46,6 +50,7 @@ public class BasicEnemy : MonoBehaviour, IDamageable
     public bool IsDead { get; private set; }
     public float CurrentHealth => currentHealth;
     public float MaxHealth => maxHealth;
+    public Transform AimAnchor => aimAnchor != null ? aimAnchor : transform;
 
     private Vector3 baseScale;
     private Color[] baseColors;

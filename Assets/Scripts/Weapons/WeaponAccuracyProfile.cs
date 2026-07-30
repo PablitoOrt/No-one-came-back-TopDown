@@ -30,6 +30,10 @@ public class WeaponAccuracyProfile : ScriptableObject
     [Tooltip("At maximum psychosis, how much of the steady-aim benefit is lost (1 = steady aim gives no benefit at all).")]
     [SerializeField, Range(0f, 1f)] private float maxPsychosisSteadyLock = 1f;
 
+    [Header("Aim Assist Bonus")]
+    [Tooltip("While the aim-assist system has a target locked, the steady-aim tolerance/break thresholds are multiplied by this - tracking a moving target keeps counting as steady instead of resetting, without making aim jitter free.")]
+    [SerializeField] private float assistedSteadyToleranceMultiplier = 4f;
+
     public float BaseSpreadAngle => baseSpreadAngle;
     public float MinSpreadAngle => minSpreadAngle;
     public float SteadyAimDuration => steadyAimDuration;
@@ -38,4 +42,5 @@ public class WeaponAccuracyProfile : ScriptableObject
     public float MaxInjurySpreadMultiplier => maxInjurySpreadMultiplier;
     public float MaxPsychosisSpreadMultiplier => maxPsychosisSpreadMultiplier;
     public float MaxPsychosisSteadyLock => maxPsychosisSteadyLock;
+    public float AssistedSteadyToleranceMultiplier => assistedSteadyToleranceMultiplier;
 }
