@@ -2,10 +2,8 @@ using UnityEngine;
 
 public static class BallisticsUtility
 {
-    // Deviates 'direction' by a random angle within a cone of the given half-angle
-    // (degrees). Uses a center-weighted (triangular) distribution so most shots land
-    // close to the aimed direction while a minority reach the full spread - this is
-    // what lets some bullets miss even when the player is "aiming correctly".
+    // Center-weighted (triangular) distribution, not uniform, so most shots
+    // land near the aimed direction while a minority reach the full spread.
     public static Vector3 ApplyConeSpread(Vector3 direction, float spreadAngleDegrees)
     {
         if (spreadAngleDegrees <= 0f || direction.sqrMagnitude < 0.0001f)
@@ -18,9 +16,7 @@ public static class BallisticsUtility
         return TiltDirection(direction, angle, spin);
     }
 
-    // Deterministic version of the tilt used by ApplyConeSpread: rotates 'direction' by
-    // exactly 'angleDegrees' around an axis that itself spins 'spinDegrees' around
-    // 'direction'. Reused by debug drawers to trace the exact cone a weapon can fire into.
+    // Deterministic tilt, reused by debug drawers to trace the exact cone.
     public static Vector3 TiltDirection(Vector3 direction, float angleDegrees, float spinDegrees)
     {
         Vector3 forward = direction.normalized;

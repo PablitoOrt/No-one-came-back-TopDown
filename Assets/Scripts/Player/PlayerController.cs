@@ -1,9 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-// Free (non-tank) top-down movement: the player moves in any camera-relative
-// direction while the body rotates independently to face PlayerAimController's
-// AimDirection, matching Signalis-style "move one way, shoot another".
+
 [RequireComponent(typeof(CharacterController))]
 public class PlayerController : MonoBehaviour
 {

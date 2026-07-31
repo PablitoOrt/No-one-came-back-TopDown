@@ -1,12 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// Fades out walls (on wallMask) that sit between this camera and target, so the
-// player stays visible in a fixed/top-down camera setup (Signalis-style rooms).
-// Detection is a throttled SphereCast rather than a per-frame Raycast: walls are
-// static, so checking ~12x/sec instead of 60x/sec costs nothing visually.
-// Fade is applied per-renderer via MaterialPropertyBlock so every wall piece can
-// still share the same WallMaterial asset (no per-object material instances).
+// Fades walls between camera and target so the player stays visible. Detection
+// is throttled (walls are static, no need to check every frame); fade uses
+// MaterialPropertyBlock so walls can keep sharing one material asset.
 [RequireComponent(typeof(Camera))]
 public class WallOcclusionFader : MonoBehaviour
 {

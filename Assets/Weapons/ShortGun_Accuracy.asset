@@ -19,5 +19,5 @@ MonoBehaviour:
   steadyBreakAngle: 20
   maxInjurySpreadMultiplier: 1.5
   maxPsychosisSpreadMultiplier: 1
-  maxPsychosisSteadyLock: 1
+  maxPsychosisSteadyLock: 0.928
   assistedSteadyToleranceMultiplier: 4

@@ -2,10 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-// Tracks which weapons the player has ever collected, so a future inventory
-// UI/selector has something to query. Deliberately does not do anything else
-// (no UI, no currently-equipped list, no switching) - that's out of scope
-// until the inventory itself gets built.
+// Ownership tracking only - no UI/switching yet, that's a separate future system.
 public class PlayerWeaponInventory : MonoBehaviour
 {
     private readonly HashSet<WeaponDefinition> ownedWeapons = new HashSet<WeaponDefinition>();

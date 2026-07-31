@@ -1,9 +1,5 @@
 using UnityEngine;
 
-// World object that grants a WeaponDefinition to whatever Weapon component
-// it finds on the interactor. Used both for pickups placed by hand in the
-// editor (weaponDefinition assigned in the Inspector) and for weapons the
-// player drops when swapping (via SpawnDropped).
 [RequireComponent(typeof(Collider))]
 public class WeaponPickup : MonoBehaviour, IInteractable
 {
@@ -27,8 +23,7 @@ public class WeaponPickup : MonoBehaviour, IInteractable
         Destroy(gameObject);
     }
 
-    // Creates a pickup for a weapon the player is dropping at runtime (no
-    // prefab needed - the project doesn't have weapon prefabs/art yet).
+    // No prefab needed yet - the project has no weapon art/prefabs to instantiate.
     public static WeaponPickup SpawnDropped(WeaponDefinition definition, Vector3 position)
     {
         var pickupObject = new GameObject($"Dropped_{definition.WeaponName}");

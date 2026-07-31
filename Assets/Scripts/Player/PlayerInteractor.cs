@@ -1,9 +1,8 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-// Finds the nearest IInteractable in range and triggers it on the existing
-// "Interact" input action (configured as a Hold interaction in the Input
-// System asset, so WasPerformedThisFrame fires once the hold completes).
+// "Interact" is a Hold interaction in the Input System asset, so
+// WasPerformedThisFrame only fires once the hold completes.
 public class PlayerInteractor : MonoBehaviour
 {
     [Header("Input")]

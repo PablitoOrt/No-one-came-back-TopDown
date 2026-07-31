@@ -1,10 +1,6 @@
 using System;
 using UnityEngine;
 
-// Central source of truth for the player's health and psychosis level.
-// Other systems (weapon accuracy, UI, VFX, ...) read the normalized
-// factors instead of raw values so they stay decoupled from how these
-// stats are tuned or displayed.
 public class PlayerStats : MonoBehaviour
 {
     [Header("Health")]

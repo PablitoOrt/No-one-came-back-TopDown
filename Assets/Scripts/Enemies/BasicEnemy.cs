@@ -2,10 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-// Minimal target used to test whether the weapon actually works: it just takes
-// hits through IDamageable and reacts with a color flash, a scale "punch" and a
-// short knockback so misses/hits are obvious at a glance. It has no AI - it
-// doesn't move or attack on its own.
+// Minimal test target: reacts to hits with a flash/punch/knockback, no AI.
 [DisallowMultipleComponent]
 public class BasicEnemy : MonoBehaviour, IDamageable, ITargetable
 {
@@ -44,7 +41,7 @@ public class BasicEnemy : MonoBehaviour, IDamageable, ITargetable
     [Header("Debug")]
     [SerializeField] private bool debugDraw = true;
 
-    public event Action<float, float> Damaged; // currentHealth, maxHealth
+    public event Action<float, float> Damaged;
     public event Action Died;
 
     public bool IsDead { get; private set; }

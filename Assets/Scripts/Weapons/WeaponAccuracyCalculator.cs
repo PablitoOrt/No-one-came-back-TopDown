@@ -1,16 +1,11 @@
 using UnityEngine;
 
-// Tracks how steadily a weapon is being aimed and derives the current
-// spread cone (in degrees) from a WeaponAccuracyProfile plus the wielder's
-// injury and psychosis levels. Plain C# (not a MonoBehaviour) so it can be
-// unit tested and reused by any weapon without extra GameObject overhead.
+// Plain C# (not a MonoBehaviour) so it can be unit tested and reused freely.
 public class WeaponAccuracyCalculator
 {
     private readonly WeaponAccuracyProfile profile;
 
     private float steadyTimer;
-    private Vector3 lastAimDirection;
-    private bool hasLastAimDirection;
 
     public WeaponAccuracyCalculator(WeaponAccuracyProfile profile)
     {
@@ -21,41 +16,17 @@ public class WeaponAccuracyCalculator
         ? Mathf.Clamp01(steadyTimer / profile.SteadyAimDuration)
         : 1f;
 
-    // Call once per frame with the current aim direction to update steadiness.
-    // steadyToleranceMultiplier scales how forgiving the steadiness check is -
-    // used by the aim-assist system so tracking a moving locked-on target keeps
-    // counting as steady instead of resetting every time the target shifts.
-    public void Tick(Vector3 aimDirection, float deltaTime, float steadyToleranceMultiplier = 1f)
+    // Call once per frame while actively aiming - progress only ever climbs,
+    // never drops from movement; injury/psychosis widen spread separately below.
+    public void Tick(float deltaTime, bool isAssistedLock = false)
     {
-        if (hasLastAimDirection)
-        {
-            float angleDelta = Vector3.Angle(lastAimDirection, aimDirection);
-            float toleratedDelta = profile.SteadyTolerancePerSecond * deltaTime * steadyToleranceMultiplier;
-            float breakAngle = profile.SteadyBreakAngle * steadyToleranceMultiplier;
-
-            if (angleDelta > breakAngle)
-            {
-                steadyTimer = 0f;
-            }
-            else if (angleDelta > toleratedDelta)
-            {
-                // A deliberate correction slows progress instead of resetting it outright.
-                steadyTimer = Mathf.Max(0f, steadyTimer - deltaTime);
-            }
-            else
-            {
-                steadyTimer += deltaTime;
-            }
-        }
-
-        lastAimDirection = aimDirection;
-        hasLastAimDirection = true;
+        float rate = isAssistedLock ? profile.AssistedSteadyRateMultiplier : 1f;
+        steadyTimer = Mathf.Min(profile.SteadyAimDuration, steadyTimer + deltaTime * rate);
     }
 
     public void Reset()
     {
         steadyTimer = 0f;
-        hasLastAimDirection = false;
     }
 
     // Current cone half-angle (degrees) a shot should be spread within.

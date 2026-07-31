@@ -6,9 +6,6 @@ public enum WeaponFireMode
     Automatic,
 }
 
-// Per-weapon firing data (pistol, shotgun, rifle, ...). Weapon reads this
-// instead of having its own fireRate/damage/etc fields, so a new weapon
-// "type" is a new asset, not a new class.
 [CreateAssetMenu(menuName = "Weapons/Weapon Definition", fileName = "NewWeaponDefinition")]
 public class WeaponDefinition : ScriptableObject
 {

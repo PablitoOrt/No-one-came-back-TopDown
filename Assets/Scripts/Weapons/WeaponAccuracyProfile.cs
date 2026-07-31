@@ -1,7 +1,5 @@
 using UnityEngine;
 
-// Per-weapon tuning data for the accuracy/spread system. Designers can create
-// one asset per weapon (pistol, shotgun, ...) without touching any code.
 [CreateAssetMenu(menuName = "Weapons/Weapon Accuracy Profile", fileName = "NewWeaponAccuracyProfile")]
 public class WeaponAccuracyProfile : ScriptableObject
 {
@@ -13,12 +11,8 @@ public class WeaponAccuracyProfile : ScriptableObject
     [SerializeField] private float minSpreadAngle = 0.5f;
 
     [Header("Steady Aim")]
-    [Tooltip("Seconds of holding a steady aim needed to reach minSpreadAngle.")]
+    [Tooltip("Seconds of holding aim needed to reach minSpreadAngle. Climbs purely over time while aiming - moving around does not slow or reset it.")]
     [SerializeField] private float steadyAimDuration = 1.5f;
-    [Tooltip("Aim movement (degrees/second) still tolerated while counting as 'steady'.")]
-    [SerializeField] private float steadyTolerancePerSecond = 25f;
-    [Tooltip("A single-frame aim jump larger than this instantly breaks steadiness.")]
-    [SerializeField] private float steadyBreakAngle = 20f;
 
     [Header("Injury Penalty")]
     [Tooltip("Extra spread multiplier applied at maximum injury (0 health). 1 = spread doubles.")]
@@ -31,16 +25,14 @@ public class WeaponAccuracyProfile : ScriptableObject
     [SerializeField, Range(0f, 1f)] private float maxPsychosisSteadyLock = 1f;
 
     [Header("Aim Assist Bonus")]
-    [Tooltip("While the aim-assist system has a target locked, the steady-aim tolerance/break thresholds are multiplied by this - tracking a moving target keeps counting as steady instead of resetting, without making aim jitter free.")]
-    [SerializeField] private float assistedSteadyToleranceMultiplier = 4f;
+    [Tooltip("While the aim-assist system has a target locked, steady-aim progress climbs directly at this rate (relative to steadyAimDuration) instead of being measured from aim-direction deltas - so tracking a moving target/moving yourself while locked on still reaches full accuracy. 1 = same pace as holding a perfectly still manual aim, higher = faster.")]
+    [SerializeField] private float assistedSteadyRateMultiplier = 2f;
 
     public float BaseSpreadAngle => baseSpreadAngle;
     public float MinSpreadAngle => minSpreadAngle;
     public float SteadyAimDuration => steadyAimDuration;
-    public float SteadyTolerancePerSecond => steadyTolerancePerSecond;
-    public float SteadyBreakAngle => steadyBreakAngle;
     public float MaxInjurySpreadMultiplier => maxInjurySpreadMultiplier;
     public float MaxPsychosisSpreadMultiplier => maxPsychosisSpreadMultiplier;
     public float MaxPsychosisSteadyLock => maxPsychosisSteadyLock;
-    public float AssistedSteadyToleranceMultiplier => assistedSteadyToleranceMultiplier;
+    public float AssistedSteadyRateMultiplier => assistedSteadyRateMultiplier;
 }
