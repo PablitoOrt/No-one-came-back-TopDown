@@ -2,20 +2,11 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-// Resolves where the player is aiming (mouse raycast against a ground plane,
-// or gamepad stick as a camera-relative direction), plus an aim-assist
-// lock-on that pulls AimDirection toward a nearby visible enemy within a
-// cone. RawAimDirection stays untouched by the assist - Weapon uses it to
-// measure genuine steadiness, separate from the assisted shot direction.
 public class PlayerAimController : MonoBehaviour
 {
     [Header("Input")]
-    [SerializeField] private InputActionAsset inputActions;
-    [SerializeField] private string actionMapName = "Player";
-    [SerializeField] private string aimPositionActionName = "AimPosition";
-    [SerializeField] private string lookActionName = "Look";
-    [Tooltip("Held to actually aim. Steady-aim accuracy and aim-assist lock-on only run while this is held.")]
-    [SerializeField] private string aimActionName = "Aim";
+    [Tooltip("Left empty, auto-resolved from this object or its parents.")]
+    [SerializeField] private PlayerInputReader input;
 
     [Header("Aiming")]
     [Tooltip("Origin used for the aim plane/ray, usually the weapon muzzle or chest height.")]
@@ -47,9 +38,6 @@ public class PlayerAimController : MonoBehaviour
 
     private static readonly Collider[] OverlapBuffer = new Collider[16];
 
-    private InputAction aimPositionAction;
-    private InputAction lookAction;
-    private InputAction aimAction;
     private ITargetable lockedTargetable;
     private float nextReacquireTime;
     private bool usingGamepadThisFrame;
@@ -58,44 +46,27 @@ public class PlayerAimController : MonoBehaviour
     public Vector3 RawAimDirection { get; private set; } = Vector3.forward;
     public Vector3 AimPoint { get; private set; }
     public Transform LockedTarget { get; private set; }
+    public ITargetable LockedTargetable => lockedTargetable;
     public bool IsTargetLocked => LockedTarget != null;
-    public bool IsAiming => aimAction.IsPressed();
     public bool IsUsingGamepad => usingGamepadThisFrame;
+
+    public bool CanAim { get; set; } = true;
+    public bool IsAiming => CanAim && input.AimHeld;
 
     public event Action<Transform> TargetLocked;
     public event Action TargetUnlocked;
 
     private void Awake()
     {
+        if (input == null) input = GetComponentInParent<PlayerInputReader>();
         if (aimCamera == null) aimCamera = Camera.main;
-
-        InputActionMap map = inputActions.FindActionMap(actionMapName, throwIfNotFound: true);
-        aimPositionAction = map.FindAction(aimPositionActionName, throwIfNotFound: true);
-        lookAction = map.FindAction(lookActionName, throwIfNotFound: true);
-        aimAction = map.FindAction(aimActionName, throwIfNotFound: true);
-    }
-
-    private void OnEnable()
-    {
-        aimPositionAction.Enable();
-        lookAction.Enable();
-        aimAction.Enable();
-    }
-
-    private void OnDisable()
-    {
-        aimPositionAction.Disable();
-        lookAction.Disable();
-        aimAction.Disable();
     }
 
     private void Update()
     {
-        Vector2 look = lookAction.ReadValue<Vector2>();
+        Vector2 look = input.Look;
 
-        // Look is bound to both gamepad stick and mouse delta, so magnitude
-        // alone can't tell them apart - check the actual source device.
-        usingGamepadThisFrame = lookAction.activeControl?.device is Gamepad
+        usingGamepadThisFrame = input.LookDevice is Gamepad
             && look.sqrMagnitude >= gamepadLookDeadzone * gamepadLookDeadzone;
 
         Vector3 rawDirection;
@@ -134,6 +105,13 @@ public class PlayerAimController : MonoBehaviour
 
     private void UpdateAimAssist(Vector3 rawDirection)
     {
+        if (!IsAiming)
+        {
+            if (LockedTarget != null) ReleaseLock();
+            AimDirection = rawDirection;
+            return;
+        }
+
         if (LockedTarget != null && !IsLockStillValid(rawDirection))
         {
             ReleaseLock();
@@ -226,14 +204,9 @@ public class PlayerAimController : MonoBehaviour
         return direction.sqrMagnitude > 0.0001f ? direction.normalized : RawAimDirection;
     }
 
-    // Distance is clamped: near the top of the screen the ray can go nearly
-    // parallel to the plane, making the raw intersection distance blow up
-    // and swing wildly for tiny mouse moves. When the ray misses the plane
-    // entirely, extrapolate along its own horizontal direction instead of
-    // falling back to a stale direction, which would jump abruptly.
     private Vector3 GetPointerAimDirection(out Vector3 hitPoint)
     {
-        Vector2 screenPosition = aimPositionAction.ReadValue<Vector2>();
+        Vector2 screenPosition = input.AimPosition;
         Ray ray = aimCamera.ScreenPointToRay(screenPosition);
         Plane aimPlane = new(Vector3.up, aimOrigin.position);
 

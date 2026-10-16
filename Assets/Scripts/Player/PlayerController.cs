@@ -1,16 +1,8 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
-
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerController : MonoBehaviour
 {
-    [Header("Input")]
-    [SerializeField] private InputActionAsset inputActions;
-    [SerializeField] private string actionMapName = "Player";
-    [SerializeField] private string moveActionName = "Move";
-    [SerializeField] private string sprintActionName = "Sprint";
-
     [Header("Movement")]
     [SerializeField] private float walkSpeed = 3.5f;
     [SerializeField] private float sprintSpeed = 6f;
@@ -23,6 +15,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float groundedStickSpeed = -2f;
 
     [Header("References")]
+    [Tooltip("Left empty, auto-resolved from this object or its parents.")]
+    [SerializeField] private PlayerInputReader input;
     [SerializeField] private Camera movementCamera;
     [SerializeField] private PlayerAimController aimController;
 
@@ -30,8 +24,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private bool debugDraw = true;
 
     private CharacterController controller;
-    private InputAction moveAction;
-    private InputAction sprintAction;
     private Vector3 moveDirection;
     private float verticalVelocity;
 
@@ -39,28 +31,13 @@ public class PlayerController : MonoBehaviour
     {
         controller = GetComponent<CharacterController>();
 
+        if (input == null) input = GetComponentInParent<PlayerInputReader>();
         if (movementCamera == null) movementCamera = Camera.main;
-
-        InputActionMap map = inputActions.FindActionMap(actionMapName, throwIfNotFound: true);
-        moveAction = map.FindAction(moveActionName, throwIfNotFound: true);
-        sprintAction = map.FindAction(sprintActionName, throwIfNotFound: true);
-    }
-
-    private void OnEnable()
-    {
-        moveAction.Enable();
-        sprintAction.Enable();
-    }
-
-    private void OnDisable()
-    {
-        moveAction.Disable();
-        sprintAction.Disable();
     }
 
     private void Update()
     {
-        moveDirection = CameraRelativeDirection(moveAction.ReadValue<Vector2>());
+        moveDirection = CameraRelativeDirection(input.Move);
 
         Move();
         RotateTowardsAim();
@@ -74,7 +51,7 @@ public class PlayerController : MonoBehaviour
 
     private void Move()
     {
-        float speed = sprintAction.IsPressed() ? sprintSpeed : walkSpeed;
+        float speed = input.SprintHeld ? sprintSpeed : walkSpeed;
 
         verticalVelocity = controller.isGrounded
             ? groundedStickSpeed

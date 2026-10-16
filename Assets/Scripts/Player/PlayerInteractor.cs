@@ -1,14 +1,10 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
-// "Interact" is a Hold interaction in the Input System asset, so
-// WasPerformedThisFrame only fires once the hold completes.
 public class PlayerInteractor : MonoBehaviour
 {
     [Header("Input")]
-    [SerializeField] private InputActionAsset inputActions;
-    [SerializeField] private string actionMapName = "Player";
-    [SerializeField] private string interactActionName = "Interact";
+    [Tooltip("Left empty, auto-resolved from this object or its parents.")]
+    [SerializeField] private PlayerInputReader input;
 
     [Header("Detection")]
     [SerializeField] private Transform interactOrigin;
@@ -22,19 +18,14 @@ public class PlayerInteractor : MonoBehaviour
 
     private static readonly Collider[] OverlapBuffer = new Collider[16];
 
-    private InputAction interactAction;
     private float nextScanTime;
 
     public IInteractable NearestInteractable { get; private set; }
 
     private void Awake()
     {
-        InputActionMap map = inputActions.FindActionMap(actionMapName, throwIfNotFound: true);
-        interactAction = map.FindAction(interactActionName, throwIfNotFound: true);
+        if (input == null) input = GetComponentInParent<PlayerInputReader>();
     }
-
-    private void OnEnable() => interactAction.Enable();
-    private void OnDisable() => interactAction.Disable();
 
     private void Update()
     {
@@ -44,7 +35,7 @@ public class PlayerInteractor : MonoBehaviour
             NearestInteractable = FindNearestInteractable();
         }
 
-        if (NearestInteractable != null && interactAction.WasPerformedThisFrame() && NearestInteractable.CanInteract(gameObject))
+        if (NearestInteractable != null && input.InteractPerformed && NearestInteractable.CanInteract(gameObject))
         {
             NearestInteractable.Interact(gameObject);
             NearestInteractable = null;
@@ -83,6 +74,7 @@ public class PlayerInteractor : MonoBehaviour
         Gizmos.DrawWireSphere(interactOrigin.position, interactRadius);
     }
 
+    // UI debug
     private void OnGUI()
     {
         if (!debugDraw || NearestInteractable == null) return;

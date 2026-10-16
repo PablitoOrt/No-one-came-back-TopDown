@@ -1,41 +1,33 @@
 using UnityEngine;
 
-public enum WeaponFireMode
-{
-    Semiautomatic,
-    Automatic,
-}
-
-[CreateAssetMenu(menuName = "Weapons/Weapon Definition", fileName = "NewWeaponDefinition")]
-public class WeaponDefinition : ScriptableObject
+public abstract class WeaponDefinition : ScriptableObject
 {
     [Header("Identity")]
     [SerializeField] private string weaponName = "Weapon";
-    [Tooltip("Stable key for a future save system. Generated once when the asset is created - do not regenerate.")]
-    [SerializeField] private string weaponId = System.Guid.NewGuid().ToString("N");
+    [Tooltip("Stable key for the save system. Kept in sync with the asset's GUID automatically, so duplicated assets never share an id.")]
+    [SerializeField] private string weaponId;
+    [SerializeField] private Sprite icon;
 
-    [Header("Firing")]
-    [SerializeField] private WeaponFireMode fireMode = WeaponFireMode.Semiautomatic;
-    [SerializeField] private float fireRate = 2f;
-    [SerializeField] private float maxRange = 100f;
-    [Tooltip("Damage dealt per pellet/projectile, not per trigger pull.")]
+    [Header("Damage")]
+    [Tooltip("Damage dealt per hit (per pellet for firearms, per target for melee).")]
     [SerializeField] private float damage = 10f;
-
-    [Header("Pellets")]
-    [SerializeField, Min(1)] private int pelletsPerShot = 1;
-    [Tooltip("Cone half-angle (degrees) pellets spread within around the aimed shot. Independent of the wobble/steady-aim cone in WeaponAccuracyProfile - this is fixed per weapon, not affected by how steady the aim is.")]
-    [SerializeField] private float pelletSpreadAngle = 0f;
-
-    [Header("Accuracy")]
-    [SerializeField] private WeaponAccuracyProfile accuracyProfile;
 
     public string WeaponName => weaponName;
     public string WeaponId => weaponId;
-    public WeaponFireMode FireMode => fireMode;
-    public float FireRate => fireRate;
-    public float MaxRange => maxRange;
+    public Sprite Icon => icon;
     public float Damage => damage;
-    public int PelletsPerShot => pelletsPerShot;
-    public float PelletSpreadAngle => pelletSpreadAngle;
-    public WeaponAccuracyProfile AccuracyProfile => accuracyProfile;
+
+    public abstract WeaponInstance CreateInstance(WeaponUser user);
+
+#if UNITY_EDITOR
+    protected virtual void OnValidate()
+    {
+        string guid = UnityEditor.AssetDatabase.AssetPathToGUID(UnityEditor.AssetDatabase.GetAssetPath(this));
+        if (!string.IsNullOrEmpty(guid) && weaponId != guid)
+        {
+            weaponId = guid;
+            UnityEditor.EditorUtility.SetDirty(this);
+        }
+    }
+#endif
 }

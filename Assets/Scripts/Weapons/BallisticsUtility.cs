@@ -2,8 +2,6 @@ using UnityEngine;
 
 public static class BallisticsUtility
 {
-    // Center-weighted (triangular) distribution, not uniform, so most shots
-    // land near the aimed direction while a minority reach the full spread.
     public static Vector3 ApplyConeSpread(Vector3 direction, float spreadAngleDegrees)
     {
         if (spreadAngleDegrees <= 0f || direction.sqrMagnitude < 0.0001f)
@@ -16,7 +14,6 @@ public static class BallisticsUtility
         return TiltDirection(direction, angle, spin);
     }
 
-    // Deterministic tilt, reused by debug drawers to trace the exact cone.
     public static Vector3 TiltDirection(Vector3 direction, float angleDegrees, float spinDegrees)
     {
         Vector3 forward = direction.normalized;

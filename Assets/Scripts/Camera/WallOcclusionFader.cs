@@ -1,9 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// Fades walls between camera and target so the player stays visible. Detection
-// is throttled (walls are static, no need to check every frame); fade uses
-// MaterialPropertyBlock so walls can keep sharing one material asset.
 [RequireComponent(typeof(Camera))]
 public class WallOcclusionFader : MonoBehaviour
 {

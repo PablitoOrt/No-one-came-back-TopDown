@@ -13,11 +13,16 @@ MonoBehaviour:
   m_Name: Pistol
   m_EditorClassIdentifier: Assembly-CSharp::WeaponDefinition
   weaponName: Weapon
-  weaponId: 4ffbe851ca68474791a5476f16cf94e3
+  weaponId: d27c1ca0aa628ad468090ebe671af22e
+  icon: {fileID: 0}
+  damage: 27
   fireMode: 0
   fireRate: 2
   maxRange: 100
-  damage: 10
   pelletsPerShot: 1
   pelletSpreadAngle: 0
   accuracyProfile: {fileID: 11400000, guid: 5ba6e73373a319249b7f7505ce26efab, type: 2}
+  ammoType: {fileID: 11400000, guid: 419fe008b73f00847b39d1a008d1d8fe, type: 2}
+  magazineSize: 3
+  reloadDuration: 1.5
+  autoReloadWhenEmpty: 1

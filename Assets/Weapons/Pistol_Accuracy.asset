@@ -13,10 +13,5 @@ MonoBehaviour:
   m_Name: Pistol_Accuracy
   m_EditorClassIdentifier: Assembly-CSharp::WeaponAccuracyProfile
   baseSpreadAngle: 8
-  minSpreadAngle: 0.5
+  minSpreadAngle: 0
   steadyAimDuration: 1.5
-  steadyTolerancePerSecond: 25
-  steadyBreakAngle: 20
-  maxInjurySpreadMultiplier: 1.5
-  maxPsychosisSpreadMultiplier: 1
-  maxPsychosisSteadyLock: 1
