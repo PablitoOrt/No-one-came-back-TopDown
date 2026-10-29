@@ -10,19 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 70a0597117d3c7346891313c36c3c294, type: 3}
-  m_Name: Pistol
-  m_EditorClassIdentifier: Assembly-CSharp::WeaponDefinition
-  weaponName: Weapon
-  weaponId: d27c1ca0aa628ad468090ebe671af22e
+  m_Name: M4_Definition
+  m_EditorClassIdentifier: Assembly-CSharp::FirearmDefinition
+  weaponName: M4
+  weaponId: 2ef965eaadd198644af9761b2c7bc6b2
   icon: {fileID: 0}
-  damage: 27
-  fireMode: 0
-  fireRate: 2
+  damage: 10
+  fireMode: 1
+  fireRate: 1
   maxRange: 100
   pelletsPerShot: 1
   pelletSpreadAngle: 0
-  accuracyProfile: {fileID: 11400000, guid: 5ba6e73373a319249b7f7505ce26efab, type: 2}
-  ammoType: {fileID: 11400000, guid: 419fe008b73f00847b39d1a008d1d8fe, type: 2}
-  magazineSize: 3
-  reloadDuration: 1.5
+  accuracyProfile: {fileID: 11400000, guid: a5a1723966d927b48b0d2da4f92abf22, type: 2}
+  ammoType: {fileID: 11400000, guid: 86aa3d612ab6fce429cb4eb0c4d0267b, type: 2}
+  magazineSize: 25
+  reloadDuration: 1
   autoReloadWhenEmpty: 1

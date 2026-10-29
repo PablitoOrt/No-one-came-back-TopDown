@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Melee
   m_EditorClassIdentifier: Assembly-CSharp::MeleeDefinition
   weaponName: Weapon
-  weaponId: 
+  weaponId: 86608d5d2517d6449b8fcd801e613aa3
   icon: {fileID: 0}
-  damage: 10
+  damage: 2
   range: 1.4
   arcAngle: 100
   maxTargets: 3

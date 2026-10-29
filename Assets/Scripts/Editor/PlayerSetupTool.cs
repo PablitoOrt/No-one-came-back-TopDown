@@ -32,6 +32,7 @@ public static class PlayerSetupTool
         if (healthWasMissing) SetFloat(health, "maxHealth", DefaultPlayerMaxHealth);
 
         Ensure<Sanity>(root, added);
+        Ensure<PlayerPusher>(root, added);
         Ensure<PlayerInventory>(combatHost, added);
         Ensure<AimSteadiness>(combatHost, added);
         Ensure<PlayerCombat>(combatHost, added);

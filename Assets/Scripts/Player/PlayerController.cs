@@ -24,12 +24,14 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private bool debugDraw = true;
 
     private CharacterController controller;
+    private IPlayerMovementModifier[] modifiers;
     private Vector3 moveDirection;
     private float verticalVelocity;
 
     private void Awake()
     {
         controller = GetComponent<CharacterController>();
+        modifiers = GetComponentsInChildren<IPlayerMovementModifier>(true);
 
         if (input == null) input = GetComponentInParent<PlayerInputReader>();
         if (movementCamera == null) movementCamera = Camera.main;
@@ -40,7 +42,7 @@ public class PlayerController : MonoBehaviour
         moveDirection = CameraRelativeDirection(input.Move);
 
         Move();
-        RotateTowardsAim();
+        Rotate();
 
         if (debugDraw)
         {
@@ -51,28 +53,63 @@ public class PlayerController : MonoBehaviour
 
     private void Move()
     {
-        float speed = input.SprintHeld ? sprintSpeed : walkSpeed;
+        bool canSprint = true;
+        float speedMultiplier = 1f;
+        foreach (IPlayerMovementModifier modifier in modifiers)
+        {
+            if (!modifier.IsActive) continue;
+            canSprint &= modifier.AllowsSprint;
+            speedMultiplier *= modifier.SpeedMultiplier;
+        }
+
+        float speed = (input.SprintHeld && canSprint ? sprintSpeed : walkSpeed) * speedMultiplier;
 
         verticalVelocity = controller.isGrounded
             ? groundedStickSpeed
             : verticalVelocity + gravity * Time.deltaTime;
 
-        Vector3 velocity = moveDirection * speed;
-        velocity.y = verticalVelocity;
+        Vector3 horizontalDelta = moveDirection * speed * Time.deltaTime;
+        foreach (IPlayerMovementModifier modifier in modifiers)
+        {
+            if (modifier.IsActive) horizontalDelta = modifier.ModifyMove(horizontalDelta);
+        }
 
-        controller.Move(velocity * Time.deltaTime);
+        Vector3 delta = horizontalDelta;
+        delta.y = verticalVelocity * Time.deltaTime;
+
+        Vector3 previousPosition = transform.position;
+        controller.Move(delta);
+        Vector3 actualDelta = transform.position - previousPosition;
+
+        foreach (IPlayerMovementModifier modifier in modifiers)
+        {
+            if (modifier.IsActive) modifier.OnMoved(actualDelta);
+        }
     }
 
-    private void RotateTowardsAim()
+    private void Rotate()
     {
-        if (aimController == null) return;
+        Vector3 lookDirection;
+        if (TryGetModifierFacing(out Vector3 facing)) lookDirection = facing;
+        else if (aimController != null) lookDirection = aimController.AimDirection;
+        else return;
 
-        Vector3 lookDirection = aimController.AimDirection;
         lookDirection.y = 0f;
         if (lookDirection.sqrMagnitude < 0.0001f) return;
 
         Quaternion targetRotation = Quaternion.LookRotation(lookDirection, Vector3.up);
         transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+    }
+
+    private bool TryGetModifierFacing(out Vector3 direction)
+    {
+        foreach (IPlayerMovementModifier modifier in modifiers)
+        {
+            if (modifier.IsActive && modifier.TryGetFacing(out direction)) return true;
+        }
+
+        direction = Vector3.zero;
+        return false;
     }
 
     private Vector3 CameraRelativeDirection(Vector2 input)

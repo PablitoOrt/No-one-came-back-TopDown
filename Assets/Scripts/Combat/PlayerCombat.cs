@@ -37,6 +37,7 @@ public class PlayerCombat : MonoBehaviour
 
     private readonly Dictionary<WeaponDefinition, WeaponInstance> instances = new Dictionary<WeaponDefinition, WeaponInstance>();
     private WeaponUser user;
+    private IPlayerActionBlocker[] blockers;
 
     public FirearmInstance CurrentFirearm { get; private set; }
     public MeleeInstance CurrentMelee { get; private set; }
@@ -58,6 +59,7 @@ public class PlayerCombat : MonoBehaviour
         Health ownerHealth = GetComponentInParent<Health>();
         GameObject root = ownerHealth != null ? ownerHealth.gameObject : transform.root.gameObject;
         user = new WeaponUser(root, muzzle, aimController, steadiness, inventory, hitMask);
+        blockers = root.GetComponentsInChildren<IPlayerActionBlocker>(true);
 
         if (unarmedMelee == null)
         {
@@ -96,7 +98,10 @@ public class PlayerCombat : MonoBehaviour
         CurrentMelee?.Tick(deltaTime);
 
         bool meleeBusy = CurrentMelee != null && CurrentMelee.IsBusy;
-        aimController.CanAim = CurrentFirearm != null && !meleeBusy;
+        bool blocked = IsCombatBlocked();
+        aimController.CanAim = CurrentFirearm != null && !meleeBusy && !blocked;
+
+        if (blocked) return;
 
         if (input.NextWeaponPressed) CycleFirearm(1);
         if (input.PreviousWeaponPressed) CycleFirearm(-1);
@@ -112,6 +117,15 @@ public class PlayerCombat : MonoBehaviour
         }
 
         if (debugDraw) DrawDebugCone();
+    }
+
+    private bool IsCombatBlocked()
+    {
+        foreach (IPlayerActionBlocker blocker in blockers)
+        {
+            if (blocker.BlocksCombat) return true;
+        }
+        return false;
     }
 
     public void EquipFirearm(FirearmDefinition definition)

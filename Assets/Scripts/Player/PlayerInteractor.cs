@@ -18,6 +18,7 @@ public class PlayerInteractor : MonoBehaviour
 
     private static readonly Collider[] OverlapBuffer = new Collider[16];
 
+    private IPlayerActionBlocker[] blockers;
     private float nextScanTime;
 
     public IInteractable NearestInteractable { get; private set; }
@@ -25,10 +26,17 @@ public class PlayerInteractor : MonoBehaviour
     private void Awake()
     {
         if (input == null) input = GetComponentInParent<PlayerInputReader>();
+        blockers = GetComponentsInParent<IPlayerActionBlocker>(true);
     }
 
     private void Update()
     {
+        if (IsBlocked())
+        {
+            NearestInteractable = null;
+            return;
+        }
+
         if (Time.time >= nextScanTime)
         {
             nextScanTime = Time.time + scanInterval;
@@ -40,6 +48,15 @@ public class PlayerInteractor : MonoBehaviour
             NearestInteractable.Interact(gameObject);
             NearestInteractable = null;
         }
+    }
+
+    private bool IsBlocked()
+    {
+        foreach (IPlayerActionBlocker blocker in blockers)
+        {
+            if (blocker.BlocksInteraction) return true;
+        }
+        return false;
     }
 
     private IInteractable FindNearestInteractable()
