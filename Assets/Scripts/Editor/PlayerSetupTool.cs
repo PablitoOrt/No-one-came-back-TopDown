@@ -36,6 +36,7 @@ public static class PlayerSetupTool
         Ensure<PlayerInventory>(combatHost, added);
         Ensure<AimSteadiness>(combatHost, added);
         Ensure<PlayerCombat>(combatHost, added);
+        Ensure<FirearmEffects>(combatHost, added);
 
         EditorSceneManager.MarkSceneDirty(root.scene);
         Selection.activeGameObject = root;

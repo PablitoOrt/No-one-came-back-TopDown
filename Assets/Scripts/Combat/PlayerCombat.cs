@@ -6,8 +6,10 @@ using UnityEngine.Serialization;
 public class PlayerCombat : MonoBehaviour
 {
     [Header("References")]
-    [Tooltip("Shot / swing origin.")]
+    [Tooltip("Swing origin. Also the shot origin for firearms without a model.")]
     [SerializeField] private Transform muzzle;
+    [Tooltip("Where equipped firearm models are spawned, e.g. the right hand bone. Left empty, this object is used.")]
+    [SerializeField] private Transform weaponHolder;
     [Tooltip("Left empty, auto-resolved from this object or its parents.")]
     [SerializeField] private PlayerAimController aimController;
     [Tooltip("Left empty, auto-resolved from this object or its parents.")]
@@ -36,11 +38,14 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] private float debugShotTraceDuration = 1f;
 
     private readonly Dictionary<WeaponDefinition, WeaponInstance> instances = new Dictionary<WeaponDefinition, WeaponInstance>();
+    private readonly Dictionary<FirearmDefinition, WeaponModel> models = new Dictionary<FirearmDefinition, WeaponModel>();
     private WeaponUser user;
     private IPlayerActionBlocker[] blockers;
 
     public FirearmInstance CurrentFirearm { get; private set; }
     public MeleeInstance CurrentMelee { get; private set; }
+    public WeaponModel CurrentModel { get; private set; }
+    public Transform Muzzle => CurrentFirearm != null ? CurrentFirearm.ShotOrigin : muzzle;
 
     public event Action<FirearmInstance> FirearmEquipped;
     public event Action<MeleeInstance> MeleeEquipped;
@@ -55,6 +60,7 @@ public class PlayerCombat : MonoBehaviour
         if (inventory == null) inventory = GetComponentInParent<PlayerInventory>();
         if (input == null) input = GetComponentInParent<PlayerInputReader>();
         if (muzzle == null) muzzle = transform;
+        if (weaponHolder == null) weaponHolder = transform;
 
         Health ownerHealth = GetComponentInParent<Health>();
         GameObject root = ownerHealth != null ? ownerHealth.gameObject : transform.root.gameObject;
@@ -139,7 +145,12 @@ public class PlayerCombat : MonoBehaviour
             CurrentFirearm.ShotMissed -= HandleShotMissed;
         }
 
+        if (CurrentModel != null) CurrentModel.gameObject.SetActive(false);
+        CurrentModel = GetOrCreateModel(definition);
+        if (CurrentModel != null) CurrentModel.gameObject.SetActive(true);
+
         CurrentFirearm = (FirearmInstance)GetOrCreateInstance(definition);
+        CurrentFirearm.Muzzle = CurrentModel != null ? CurrentModel.Muzzle : null;
         CurrentFirearm.ShotHit += HandleShotHit;
         CurrentFirearm.ShotMissed += HandleShotMissed;
         CurrentFirearm.OnEquipped();
@@ -167,6 +178,18 @@ public class PlayerCombat : MonoBehaviour
             instances.Add(definition, instance);
         }
         return instance;
+    }
+
+    private WeaponModel GetOrCreateModel(FirearmDefinition definition)
+    {
+        if (definition.ModelPrefab == null) return null;
+
+        if (!models.TryGetValue(definition, out WeaponModel model))
+        {
+            model = Instantiate(definition.ModelPrefab, weaponHolder, false);
+            models.Add(definition, model);
+        }
+        return model;
     }
 
     private void HandleWeaponAdded(WeaponDefinition definition)
@@ -212,7 +235,7 @@ public class PlayerCombat : MonoBehaviour
 
     private void HandleShotHit(RaycastHit hit)
     {
-        if (debugDraw) Debug.DrawLine(muzzle.position, hit.point, Color.green, debugShotTraceDuration);
+        if (debugDraw) Debug.DrawLine(Muzzle.position, hit.point, Color.green, debugShotTraceDuration);
     }
 
     private void HandleShotMissed(Vector3 origin, Vector3 direction)
@@ -224,7 +247,7 @@ public class PlayerCombat : MonoBehaviour
     {
         if (CurrentFirearm == null || !aimController.IsAiming) return;
 
-        Vector3 origin = muzzle.position;
+        Vector3 origin = Muzzle.position;
         Vector3 aimDirection = aimController.AimDirection;
         float spreadAngle = CurrentSpreadAngle;
 

@@ -17,7 +17,7 @@ MonoBehaviour:
   icon: {fileID: 0}
   damage: 10
   fireMode: 1
-  fireRate: 1
+  fireRate: 4
   maxRange: 100
   pelletsPerShot: 1
   pelletSpreadAngle: 0
@@ -26,3 +26,4 @@ MonoBehaviour:
   magazineSize: 25
   reloadDuration: 1
   autoReloadWhenEmpty: 1
+  effectsProfile: {fileID: 11400000, guid: 08a0cb2e4ea181a42bb29b97b8b705e0, type: 2}

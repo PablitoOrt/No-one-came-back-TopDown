@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 12599837f37da2e4bbaa5bd47bf3cf25, type: 3}
+  m_Name: Pistol_Effects
+  m_EditorClassIdentifier: Assembly-CSharp::FirearmEffectsProfile
+  muzzleFlash: {fileID: 755211523057661965, guid: f0afc5c09d75c0a498c45f07ad3c1a20, type: 3}
+  shellEject: {fileID: 755995952854184201, guid: 996dfeb26ebb96d479824a19ccc5e64e, type: 3}
+  shellEjectOffset: {x: 0.05, y: 0.05, z: -0.25}
+  tracer: {fileID: 3318184547441113057, guid: 4622577e736fa4c4a9efa4556d488e09, type: 3}
+  tracerSpeed: 140
+  tracerChance: 1
+  impact: {fileID: 1435011805525516709, guid: 1ff79bbc1523f064e88f4374b67c8263, type: 3}
+  poolSize: 4

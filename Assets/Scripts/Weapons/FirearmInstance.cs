@@ -25,6 +25,8 @@ public class FirearmInstance : WeaponInstance
 
     public FirearmDefinition Firearm => firearm;
     public int AmmoInMagazine { get; private set; }
+    public Transform Muzzle { get; set; }
+    public Transform ShotOrigin => Muzzle != null ? Muzzle : User.Origin;
     public bool IsReloading => reloadRemaining > 0f;
     public float ReloadProgress01 => IsReloading && firearm.ReloadDuration > 0f ? 1f - reloadRemaining / firearm.ReloadDuration : 0f;
     public override bool IsBusy => IsReloading;
@@ -102,7 +104,7 @@ public class FirearmInstance : WeaponInstance
 
     private void Fire()
     {
-        Vector3 origin = User.Origin.position;
+        Vector3 origin = ShotOrigin.position;
         Vector3 centerDirection = BallisticsUtility.ApplyConeSpread(User.Aim.AimDirection, CurrentSpreadAngle);
 
         Fired?.Invoke();

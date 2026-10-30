@@ -1323,7 +1323,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: ff654d72220563041b91de322307a122, type: 2}
+  - {fileID: 2100000, guid: ea734634c948fca4c97cbb419b52e6bb, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1364,7 +1364,7 @@ Transform:
   m_GameObject: {fileID: 589861477}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.1714201, y: 1.19, z: 3}
+  m_LocalPosition: {x: 0.93, y: 1.19, z: 3}
   m_LocalScale: {x: 1, y: 2.4207, z: 1.55}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1771,7 +1771,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: ff654d72220563041b91de322307a122, type: 2}
+  - {fileID: 2100000, guid: 580909707e6829e43909de08510df53a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2392,7 +2392,7 @@ Transform:
   m_GameObject: {fileID: 879582499}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.68, y: -0.1, z: 0.07}
+  m_LocalPosition: {x: 0.585, y: 0.219, z: 0.71}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2570,6 +2570,7 @@ GameObject:
   - component: {fileID: 1033545015}
   - component: {fileID: 1033545017}
   - component: {fileID: 1033545018}
+  - component: {fileID: 1033545019}
   m_Layer: 10
   m_Name: Weapon
   m_TagString: Untagged
@@ -2605,11 +2606,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Weapon
   muzzle: {fileID: 1033545012}
+  weaponHolder: {fileID: 0}
   aimController: {fileID: 1033545017}
   steadiness: {fileID: 1033545018}
   inventory: {fileID: 1033545015}
   input: {fileID: 1090467304}
-  startingFirearm: {fileID: 11400000, guid: 2ef965eaadd198644af9761b2c7bc6b2, type: 2}
+  startingFirearm: {fileID: 11400000, guid: d27c1ca0aa628ad468090ebe671af22e, type: 2}
   unarmedMelee: {fileID: 11400000, guid: 86608d5d2517d6449b8fcd801e613aa3, type: 2}
   hitMask:
     serializedVersion: 2
@@ -2631,10 +2633,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerWeaponInventory
   startingWeapons:
-  - {fileID: 11400000, guid: 2ef965eaadd198644af9761b2c7bc6b2, type: 2}
+  - {fileID: 11400000, guid: d27c1ca0aa628ad468090ebe671af22e, type: 2}
   startingAmmo:
-  - type: {fileID: 11400000, guid: 86aa3d612ab6fce429cb4eb0c4d0267b, type: 2}
-    amount: 10
+  - type: {fileID: 11400000, guid: 419fe008b73f00847b39d1a008d1d8fe, type: 2}
+    amount: 25
 --- !u!114 &1033545016
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2725,6 +2727,20 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1033545019
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1033545011}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e5e3e426620f064b94db1c84d62a524, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FirearmEffects
+  combat: {fileID: 0}
+  aimController: {fileID: 0}
 --- !u!1 &1090467295
 GameObject:
   m_ObjectHideFlags: 0
@@ -3030,7 +3046,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: ff654d72220563041b91de322307a122, type: 2}
+  - {fileID: 2100000, guid: 580909707e6829e43909de08510df53a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7ed3c0915730b74b895c1cfaeebb6de, type: 3}
   m_Name: Closet
   m_EditorClassIdentifier: Assembly-CSharp::PushableProfile
-  speedMultiplier: 0.182
+  speedMultiplier: 0.46
   allowSprint: 1
   movingSpeedThreshold: 0.05
   snapGrabToFaces: 1

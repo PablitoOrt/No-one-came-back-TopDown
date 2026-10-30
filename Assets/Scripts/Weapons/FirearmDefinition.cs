@@ -32,6 +32,13 @@ public class FirearmDefinition : WeaponDefinition
     [Tooltip("Start reloading automatically when trying to fire with an empty magazine.")]
     [SerializeField] private bool autoReloadWhenEmpty = true;
 
+    [Header("Visuals")]
+    [Tooltip("Prefab with the weapon mesh and a WeaponModel component marking the barrel tip. Spawned on the player's weapon holder when equipped.")]
+    [SerializeField] private WeaponModel modelPrefab;
+
+    [Header("Effects")]
+    [SerializeField] private FirearmEffectsProfile effectsProfile;
+
     public WeaponFireMode FireMode => fireMode;
     public float FireRate => fireRate;
     public float MaxRange => maxRange;
@@ -43,6 +50,8 @@ public class FirearmDefinition : WeaponDefinition
     public bool UsesMagazine => magazineSize > 0;
     public float ReloadDuration => reloadDuration;
     public bool AutoReloadWhenEmpty => autoReloadWhenEmpty;
+    public WeaponModel ModelPrefab => modelPrefab;
+    public FirearmEffectsProfile EffectsProfile => effectsProfile;
 
     public override WeaponInstance CreateInstance(WeaponUser user) => new FirearmInstance(this, user);
 }

@@ -15,7 +15,7 @@ MonoBehaviour:
   weaponName: Pistol
   weaponId: d27c1ca0aa628ad468090ebe671af22e
   icon: {fileID: 0}
-  damage: 27
+  damage: 5
   fireMode: 0
   fireRate: 2
   maxRange: 100
@@ -26,3 +26,5 @@ MonoBehaviour:
   magazineSize: 3
   reloadDuration: 1.5
   autoReloadWhenEmpty: 1
+  modelPrefab: {fileID: 769547811818588878, guid: 2dc2a659684861e4f81e92bde93dd47f, type: 3}
+  effectsProfile: {fileID: 11400000, guid: 5a6fa42fa02cac846b2dede94c04e093, type: 2}
