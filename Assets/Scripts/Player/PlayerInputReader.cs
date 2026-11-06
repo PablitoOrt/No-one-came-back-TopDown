@@ -18,10 +18,6 @@ public class PlayerInputReader : MonoBehaviour
     [SerializeField] private string interactActionName = "Interact";
     [Tooltip("Optional - reload is simply unavailable if the action doesn't exist.")]
     [SerializeField] private string reloadActionName = "Reload";
-    [Tooltip("Optional.")]
-    [SerializeField] private string nextWeaponActionName = "Next";
-    [Tooltip("Optional.")]
-    [SerializeField] private string previousWeaponActionName = "Previous";
 
     private InputActionMap map;
     private InputAction move;
@@ -32,8 +28,6 @@ public class PlayerInputReader : MonoBehaviour
     private InputAction sprint;
     private InputAction interact;
     private InputAction reload;
-    private InputAction nextWeapon;
-    private InputAction previousWeapon;
 
     public Vector2 Move => move.ReadValue<Vector2>();
     public Vector2 Look => look.ReadValue<Vector2>();
@@ -45,9 +39,10 @@ public class PlayerInputReader : MonoBehaviour
     public bool AttackHeld => attack.IsPressed();
     public bool AttackPressed => attack.WasPressedThisFrame();
     public bool InteractPerformed => interact.WasPerformedThisFrame();
+    public InputAction InteractAction => interact;
+    // 0..1 progress of the Hold interaction on Interact.
+    public float InteractHoldProgress => interact.GetTimeoutCompletionPercentage();
     public bool ReloadPressed => reload != null && reload.WasPressedThisFrame();
-    public bool NextWeaponPressed => nextWeapon != null && nextWeapon.WasPressedThisFrame();
-    public bool PreviousWeaponPressed => previousWeapon != null && previousWeapon.WasPressedThisFrame();
 
     private void Awake()
     {
@@ -61,8 +56,6 @@ public class PlayerInputReader : MonoBehaviour
         sprint = map.FindAction(sprintActionName, throwIfNotFound: true);
         interact = map.FindAction(interactActionName, throwIfNotFound: true);
         reload = map.FindAction(reloadActionName);
-        nextWeapon = map.FindAction(nextWeaponActionName);
-        previousWeapon = map.FindAction(previousWeaponActionName);
     }
 
     private void OnEnable() => map.Enable();

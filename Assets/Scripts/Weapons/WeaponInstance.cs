@@ -1,9 +1,10 @@
+using NoOneCameBack.Inventory;
 using UnityEngine;
 
 public interface IAmmoSource
 {
-    int GetAmmo(AmmoType type);
-    int TakeAmmo(AmmoType type, int requested);
+    int GetAmmo(ItemDefinition ammo);
+    int TakeAmmo(ItemDefinition ammo, int requested);
 }
 
 public class WeaponUser

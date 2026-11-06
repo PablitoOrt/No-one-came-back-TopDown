@@ -31,9 +31,9 @@ public class FirearmInstance : WeaponInstance
     public float ReloadProgress01 => IsReloading && firearm.ReloadDuration > 0f ? 1f - reloadRemaining / firearm.ReloadDuration : 0f;
     public override bool IsBusy => IsReloading;
 
-    public int ReserveAmmo => firearm.AmmoType == null || User.AmmoSource == null
+    public int ReserveAmmo => firearm.AmmoItem == null || User.AmmoSource == null
         ? int.MaxValue
-        : User.AmmoSource.GetAmmo(firearm.AmmoType);
+        : User.AmmoSource.GetAmmo(firearm.AmmoItem);
 
     public float CurrentSpreadAngle => firearm.AccuracyProfile != null && User.Steadiness != null
         ? firearm.AccuracyProfile.EvaluateSpread(User.Steadiness.Progress01)
@@ -73,6 +73,16 @@ public class FirearmInstance : WeaponInstance
         return true;
     }
 
+    // Restores the rounds stored in the inventory item when this weapon gets equipped.
+    public void SetAmmoInMagazine(int rounds)
+    {
+        int clamped = Mathf.Clamp(rounds, 0, firearm.MagazineSize);
+        if (clamped == AmmoInMagazine) return;
+
+        AmmoInMagazine = clamped;
+        AmmoChanged?.Invoke(AmmoInMagazine);
+    }
+
     public override bool TryReload()
     {
         if (!firearm.UsesMagazine || IsReloading || AmmoInMagazine >= firearm.MagazineSize) return false;
@@ -93,9 +103,9 @@ public class FirearmInstance : WeaponInstance
         reloadRemaining = 0f;
 
         int needed = firearm.MagazineSize - AmmoInMagazine;
-        int taken = firearm.AmmoType == null || User.AmmoSource == null
+        int taken = firearm.AmmoItem == null || User.AmmoSource == null
             ? needed
-            : User.AmmoSource.TakeAmmo(firearm.AmmoType, needed);
+            : User.AmmoSource.TakeAmmo(firearm.AmmoItem, needed);
 
         AmmoInMagazine += taken;
         AmmoChanged?.Invoke(AmmoInMagazine);

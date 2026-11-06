@@ -1,6 +1,7 @@
+using NoOneCameBack.Inventory;
 using UnityEngine;
 
-public abstract class WeaponDefinition : ScriptableObject
+public abstract class WeaponDefinition : ScriptableObject, IWeaponData
 {
     [Header("Identity")]
     [SerializeField] private string weaponName = "Weapon";
@@ -15,6 +16,8 @@ public abstract class WeaponDefinition : ScriptableObject
     public string WeaponName => weaponName;
     public string WeaponId => weaponId;
     public Sprite Icon => icon;
+    public virtual ItemDefinition AmmoItem => null;
+    public virtual int MagazineCapacity => 0;
     public float Damage => damage;
 
     public abstract WeaponInstance CreateInstance(WeaponUser user);

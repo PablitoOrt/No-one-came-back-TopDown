@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
+using NoOneCameBack.Inventory;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class PlayerCombat : MonoBehaviour
 {
@@ -14,16 +14,13 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] private PlayerAimController aimController;
     [Tooltip("Left empty, auto-resolved from this object or its parents.")]
     [SerializeField] private AimSteadiness steadiness;
-    [Tooltip("Left empty, auto-resolved from this object or its parents.")]
-    [SerializeField] private PlayerInventory inventory;
+    [Tooltip("Source of the equipped weapon and reserve ammo. Left empty, auto-resolved from this object or its parents.")]
+    [SerializeField] private PlayerInventoryHolder inventory;
     [Tooltip("Left empty, auto-resolved from this object or its parents.")]
     [SerializeField] private PlayerInputReader input;
 
     [Header("Loadout")]
-    [Tooltip("Added to the inventory and equipped at start.")]
-    [FormerlySerializedAs("definition")]
-    [SerializeField] private FirearmDefinition startingFirearm;
-    [Tooltip("Strike used until a melee weapon is picked up. Left empty, a default unarmed strike is created at runtime.")]
+    [Tooltip("Strike used while no melee weapon is equipped. Left empty, a default unarmed strike is created at runtime.")]
     [SerializeField] private MeleeDefinition unarmedMelee;
 
     [Header("Hit Detection")]
@@ -41,6 +38,7 @@ public class PlayerCombat : MonoBehaviour
     private readonly Dictionary<FirearmDefinition, WeaponModel> models = new Dictionary<FirearmDefinition, WeaponModel>();
     private WeaponUser user;
     private IPlayerActionBlocker[] blockers;
+    private ItemInstance equippedItem;
 
     public FirearmInstance CurrentFirearm { get; private set; }
     public MeleeInstance CurrentMelee { get; private set; }
@@ -57,7 +55,7 @@ public class PlayerCombat : MonoBehaviour
     {
         if (aimController == null) aimController = GetComponentInParent<PlayerAimController>();
         if (steadiness == null) steadiness = GetComponentInParent<AimSteadiness>();
-        if (inventory == null) inventory = GetComponentInParent<PlayerInventory>();
+        if (inventory == null) inventory = GetComponentInParent<PlayerInventoryHolder>();
         if (input == null) input = GetComponentInParent<PlayerInputReader>();
         if (muzzle == null) muzzle = transform;
         if (weaponHolder == null) weaponHolder = transform;
@@ -74,27 +72,21 @@ public class PlayerCombat : MonoBehaviour
         }
     }
 
-    private void OnEnable()
-    {
-        if (inventory != null) inventory.WeaponAdded += HandleWeaponAdded;
-    }
-
-    private void OnDisable()
-    {
-        if (inventory != null) inventory.WeaponAdded -= HandleWeaponAdded;
-    }
-
+    // Subscribed in Start: the holder builds its model in Awake, which may run after ours.
     private void Start()
     {
-        if (startingFirearm != null && inventory != null) inventory.AddWeapon(startingFirearm);
-
         if (inventory != null)
         {
-            foreach (WeaponDefinition owned in inventory.Weapons) HandleWeaponAdded(owned);
+            inventory.Model.EquippedChanged += ApplyEquippedItem;
+            ApplyEquippedItem(inventory.Model.EquippedWeapon);
         }
 
-        if (CurrentFirearm == null && startingFirearm != null && inventory == null) EquipFirearm(startingFirearm);
         if (CurrentMelee == null) EquipMelee(unarmedMelee);
+    }
+
+    private void OnDestroy()
+    {
+        if (inventory != null && inventory.Model != null) inventory.Model.EquippedChanged -= ApplyEquippedItem;
     }
 
     private void Update()
@@ -109,8 +101,6 @@ public class PlayerCombat : MonoBehaviour
 
         if (blocked) return;
 
-        if (input.NextWeaponPressed) CycleFirearm(1);
-        if (input.PreviousWeaponPressed) CycleFirearm(-1);
         if (input.ReloadPressed) CurrentFirearm?.TryReload();
 
         if (aimController.IsAiming)
@@ -134,18 +124,36 @@ public class PlayerCombat : MonoBehaviour
         return false;
     }
 
-    public void EquipFirearm(FirearmDefinition definition)
+    // The single equipped slot of the tablet inventory decides the loadout: a firearm keeps the unarmed strike,
+    // a melee weapon replaces it, anything else (throwables, nothing) leaves the player unarmed.
+    private void ApplyEquippedItem(ItemInstance item)
     {
-        if (definition == null || CurrentFirearm?.Definition == definition) return;
+        equippedItem = item;
 
-        if (CurrentFirearm != null)
+        switch (item?.Definition.Weapon)
         {
-            CurrentFirearm.OnUnequipped();
-            CurrentFirearm.ShotHit -= HandleShotHit;
-            CurrentFirearm.ShotMissed -= HandleShotMissed;
+            case FirearmDefinition firearm:
+                EquipFirearm(firearm);
+                CurrentFirearm.SetAmmoInMagazine(item.LoadedAmmo);
+                EquipMelee(unarmedMelee);
+                break;
+            case MeleeDefinition melee:
+                UnequipFirearm();
+                EquipMelee(melee);
+                break;
+            default:
+                UnequipFirearm();
+                EquipMelee(unarmedMelee);
+                break;
         }
+    }
 
-        if (CurrentModel != null) CurrentModel.gameObject.SetActive(false);
+    private void EquipFirearm(FirearmDefinition definition)
+    {
+        if (CurrentFirearm?.Definition == definition) return;
+
+        UnequipFirearm();
+
         CurrentModel = GetOrCreateModel(definition);
         if (CurrentModel != null) CurrentModel.gameObject.SetActive(true);
 
@@ -153,13 +161,35 @@ public class PlayerCombat : MonoBehaviour
         CurrentFirearm.Muzzle = CurrentModel != null ? CurrentModel.Muzzle : null;
         CurrentFirearm.ShotHit += HandleShotHit;
         CurrentFirearm.ShotMissed += HandleShotMissed;
+        CurrentFirearm.AmmoChanged += HandleAmmoChanged;
         CurrentFirearm.OnEquipped();
 
         steadiness?.SetProfile(definition.AccuracyProfile);
         FirearmEquipped?.Invoke(CurrentFirearm);
     }
 
-    public void EquipMelee(MeleeDefinition definition)
+    private void UnequipFirearm()
+    {
+        if (CurrentFirearm != null)
+        {
+            CurrentFirearm.OnUnequipped();
+            CurrentFirearm.ShotHit -= HandleShotHit;
+            CurrentFirearm.ShotMissed -= HandleShotMissed;
+            CurrentFirearm.AmmoChanged -= HandleAmmoChanged;
+            CurrentFirearm = null;
+        }
+
+        if (CurrentModel != null)
+        {
+            CurrentModel.gameObject.SetActive(false);
+            CurrentModel = null;
+        }
+    }
+
+    // Rounds live in the inventory item so they survive swapping weapons, dropping them and saving.
+    private void HandleAmmoChanged(int rounds) => equippedItem?.SetLoadedAmmo(rounds);
+
+    private void EquipMelee(MeleeDefinition definition)
     {
         if (definition == null || CurrentMelee?.Definition == definition) return;
 
@@ -190,47 +220,6 @@ public class PlayerCombat : MonoBehaviour
             models.Add(definition, model);
         }
         return model;
-    }
-
-    private void HandleWeaponAdded(WeaponDefinition definition)
-    {
-        switch (definition)
-        {
-            case FirearmDefinition firearm when CurrentFirearm == null:
-                EquipFirearm(firearm);
-                break;
-            case MeleeDefinition melee when CurrentMelee == null || CurrentMelee.Definition == unarmedMelee:
-                EquipMelee(melee);
-                break;
-        }
-    }
-
-    private void CycleFirearm(int step)
-    {
-        if (inventory == null || (CurrentFirearm != null && CurrentFirearm.IsBusy)) return;
-
-        IReadOnlyList<WeaponDefinition> owned = inventory.Weapons;
-        int count = owned.Count;
-        int start = CurrentFirearm != null ? IndexOf(owned, CurrentFirearm.Definition) : -1;
-
-        for (int offset = 1; offset <= count; offset++)
-        {
-            int index = ((start + step * offset) % count + count) % count;
-            if (owned[index] is FirearmDefinition firearm)
-            {
-                EquipFirearm(firearm);
-                return;
-            }
-        }
-    }
-
-    private static int IndexOf(IReadOnlyList<WeaponDefinition> list, WeaponDefinition item)
-    {
-        for (int i = 0; i < list.Count; i++)
-        {
-            if (list[i] == item) return i;
-        }
-        return -1;
     }
 
     private void HandleShotHit(RaycastHit hit)

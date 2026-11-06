@@ -22,7 +22,7 @@ MonoBehaviour:
   pelletsPerShot: 8
   pelletSpreadAngle: 0
   accuracyProfile: {fileID: 11400000, guid: 832eb51b9c1c9d24abe67ae25a1a9e5a, type: 2}
-  ammoType: {fileID: 0}
+  ammoItem: {fileID: 11400000, guid: f8a601c4c249f13408c298504d57753f, type: 2}
   magazineSize: 4
   reloadDuration: 1.5
   autoReloadWhenEmpty: 1

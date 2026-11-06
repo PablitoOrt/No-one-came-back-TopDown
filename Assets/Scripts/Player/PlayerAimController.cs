@@ -41,6 +41,7 @@ public class PlayerAimController : MonoBehaviour
     private ITargetable lockedTargetable;
     private float nextReacquireTime;
     private bool usingGamepadThisFrame;
+    private IPlayerActionBlocker[] blockers;
 
     public Vector3 AimDirection { get; private set; } = Vector3.forward;
     public Vector3 RawAimDirection { get; private set; } = Vector3.forward;
@@ -60,10 +61,14 @@ public class PlayerAimController : MonoBehaviour
     {
         if (input == null) input = GetComponentInParent<PlayerInputReader>();
         if (aimCamera == null) aimCamera = Camera.main;
+        blockers = input.GetComponentsInChildren<IPlayerActionBlocker>(true);
     }
 
     private void Update()
     {
+        // Keep the last aim while e.g. the tablet is open, so the player (and anything parented to it) doesn't turn with the mouse.
+        if (IsBlocked()) return;
+
         Vector2 look = input.Look;
 
         usingGamepadThisFrame = input.LookDevice is Gamepad
@@ -193,6 +198,15 @@ public class PlayerAimController : MonoBehaviour
         LockedTarget = null;
         lockedTargetable = null;
         TargetUnlocked?.Invoke();
+    }
+
+    private bool IsBlocked()
+    {
+        foreach (IPlayerActionBlocker blocker in blockers)
+        {
+            if (blocker.BlocksCombat) return true;
+        }
+        return false;
     }
 
     private Vector3 GetGamepadAimDirection(Vector2 stickInput)

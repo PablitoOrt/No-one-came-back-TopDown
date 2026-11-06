@@ -7,8 +7,8 @@ public class PlayerInteractor : MonoBehaviour
     [SerializeField] private PlayerInputReader input;
 
     [Header("Detection")]
-    [SerializeField] private Transform interactOrigin;
-    [SerializeField] private float interactRadius = 1.5f;
+    [Tooltip("Trigger BoxCollider on the interact origin; its shape defines the detection area.")]
+    [SerializeField] private BoxCollider interactArea;
     [SerializeField] private LayerMask interactableMask;
     [Tooltip("Seconds between scans for nearby interactables.")]
     [SerializeField] private float scanInterval = 0.1f;
@@ -61,14 +61,19 @@ public class PlayerInteractor : MonoBehaviour
 
     private IInteractable FindNearestInteractable()
     {
-        Vector3 origin = interactOrigin.position;
-        int count = Physics.OverlapSphereNonAlloc(origin, interactRadius, OverlapBuffer, interactableMask, QueryTriggerInteraction.Collide);
+        if (interactArea == null || !interactArea.enabled) return null;
+
+        Transform area = interactArea.transform;
+        Vector3 origin = area.TransformPoint(interactArea.center);
+        Vector3 halfExtents = Vector3.Scale(interactArea.size, Abs(area.lossyScale)) * 0.5f;
+        int count = Physics.OverlapBoxNonAlloc(origin, halfExtents, OverlapBuffer, area.rotation, interactableMask, QueryTriggerInteraction.Collide);
 
         IInteractable nearest = null;
         float nearestSqrDistance = float.MaxValue;
 
         for (int i = 0; i < count; i++)
         {
+            if (OverlapBuffer[i] == interactArea) continue;
             if (!OverlapBuffer[i].TryGetComponent(out IInteractable interactable)) continue;
             if (!interactable.CanInteract(gameObject)) continue;
 
@@ -83,12 +88,16 @@ public class PlayerInteractor : MonoBehaviour
         return nearest;
     }
 
+    private static Vector3 Abs(Vector3 v) => new Vector3(Mathf.Abs(v.x), Mathf.Abs(v.y), Mathf.Abs(v.z));
+
     private void OnDrawGizmosSelected()
     {
-        if (!debugDraw || interactOrigin == null) return;
+        if (!debugDraw || interactArea == null) return;
 
         Gizmos.color = Color.cyan;
-        Gizmos.DrawWireSphere(interactOrigin.position, interactRadius);
+        Gizmos.matrix = interactArea.transform.localToWorldMatrix;
+        Gizmos.DrawWireCube(interactArea.center, interactArea.size);
+        Gizmos.matrix = Matrix4x4.identity;
     }
 
     // UI debug

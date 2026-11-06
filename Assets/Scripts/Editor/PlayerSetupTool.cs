@@ -33,7 +33,7 @@ public static class PlayerSetupTool
 
         Ensure<Sanity>(root, added);
         Ensure<PlayerPusher>(root, added);
-        Ensure<PlayerInventory>(combatHost, added);
+
         Ensure<AimSteadiness>(combatHost, added);
         Ensure<PlayerCombat>(combatHost, added);
         Ensure<FirearmEffects>(combatHost, added);

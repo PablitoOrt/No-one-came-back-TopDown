@@ -1,3 +1,4 @@
+using NoOneCameBack.Inventory;
 using UnityEngine;
 
 public enum WeaponFireMode
@@ -24,8 +25,8 @@ public class FirearmDefinition : WeaponDefinition
     [SerializeField] private WeaponAccuracyProfile accuracyProfile;
 
     [Header("Ammo")]
-    [Tooltip("Ammo consumed from the inventory when reloading. Empty = unlimited reserve.")]
-    [SerializeField] private AmmoType ammoType;
+    [Tooltip("Ammo item taken from the inventory grid when reloading. Empty = unlimited reserve.")]
+    [SerializeField] private ItemDefinition ammoItem;
     [Tooltip("Rounds per magazine. 0 = no magazine: unlimited shots, never reloads.")]
     [SerializeField, Min(0)] private int magazineSize = 0;
     [SerializeField, Min(0f)] private float reloadDuration = 1.5f;
@@ -45,7 +46,8 @@ public class FirearmDefinition : WeaponDefinition
     public int PelletsPerShot => pelletsPerShot;
     public float PelletSpreadAngle => pelletSpreadAngle;
     public WeaponAccuracyProfile AccuracyProfile => accuracyProfile;
-    public AmmoType AmmoType => ammoType;
+    public override ItemDefinition AmmoItem => ammoItem;
+    public override int MagazineCapacity => magazineSize;
     public int MagazineSize => magazineSize;
     public bool UsesMagazine => magazineSize > 0;
     public float ReloadDuration => reloadDuration;

@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70a0597117d3c7346891313c36c3c294, type: 3}
+  m_Name: Fall_Definition
+  m_EditorClassIdentifier: Assembly-CSharp::FirearmDefinition
+  weaponName: M4
+  weaponId: 2ef965eaadd198644af9761b2c7bc6b2
+  icon: {fileID: 0}
+  damage: 10
+  fireMode: 1
+  fireRate: 4
+  maxRange: 100
+  pelletsPerShot: 1
+  pelletSpreadAngle: 0
+  accuracyProfile: {fileID: 11400000, guid: a5a1723966d927b48b0d2da4f92abf22, type: 2}
+  ammoItem: {fileID: 11400000, guid: 7447a2714ee416c4495a878e3b2bc33e, type: 2}
+  magazineSize: 25
+  reloadDuration: 1
+  autoReloadWhenEmpty: 1
+  modelPrefab: {fileID: -7626014423008184625, guid: 0a880daf9189d6148862b6073af474ab, type: 3}
+  effectsProfile: {fileID: 11400000, guid: 08a0cb2e4ea181a42bb29b97b8b705e0, type: 2}
