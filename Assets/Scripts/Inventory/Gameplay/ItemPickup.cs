@@ -33,8 +33,8 @@ namespace NoOneCameBack.Inventory
                 ItemInstance item = Instance;
                 if (item == null) return string.Empty;
                 return item.Quantity > 1
-                    ? $"Recoger {item.Definition.DisplayName} x{item.Quantity}"
-                    : $"Recoger {item.Definition.DisplayName}";
+                    ? $"Pick up {item.Definition.DisplayName} x{item.Quantity}"
+                    : $"Pick up {item.Definition.DisplayName}";
             }
         }
 

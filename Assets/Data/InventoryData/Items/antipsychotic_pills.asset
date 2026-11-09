@@ -10,19 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a1a8306917f0513469b7e7c2743f40a1, type: 3}
-  m_Name: bandages
+  m_Name: antipsychotic_pills
   m_EditorClassIdentifier: NoOneCameBack.Inventory::NoOneCameBack.Inventory.ItemDefinition
-  id: bandages
-  displayName: Vendas
-  description: Detienen el sangrado y curan heridas leves.
+  id: antipsychotic_pills
+  displayName: Antipsychotic pills
+  description: Calm the mind for a while.
   icon: {fileID: 0}
   category: 2
   size: {x: 1, y: 1}
   canRotate: 0
-  maxStack: 3
+  maxStack: 5
   effects:
-  - {fileID: 11400000, guid: 85c8e23b2dd6294448807d55e291cf15, type: 2}
-  - {fileID: 11400000, guid: 7ac31d24928b11b478d7cb4bee9e1c06, type: 2}
+  - {fileID: 11400000, guid: 983bd38b91dd03c41907d1a78442cfb9, type: 2}
   consumeOnUse: 1
   weapon: {fileID: 0}
   maxDurability: 0

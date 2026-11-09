@@ -9,5 +9,6 @@ namespace NoOneCameBack.Inventory
         Key,
         Anchor,
         Misc,
+        Tool,
     }
 }

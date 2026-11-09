@@ -18,6 +18,7 @@ public class PlayerInputReader : MonoBehaviour
     [SerializeField] private string interactActionName = "Interact";
     [Tooltip("Optional - reload is simply unavailable if the action doesn't exist.")]
     [SerializeField] private string reloadActionName = "Reload";
+    [SerializeField] private string flashlightActionName = "FlashLight";
 
     private InputActionMap map;
     private InputAction move;
@@ -28,6 +29,7 @@ public class PlayerInputReader : MonoBehaviour
     private InputAction sprint;
     private InputAction interact;
     private InputAction reload;
+    private InputAction flashlight;
 
     public Vector2 Move => move.ReadValue<Vector2>();
     public Vector2 Look => look.ReadValue<Vector2>();
@@ -43,6 +45,7 @@ public class PlayerInputReader : MonoBehaviour
     // 0..1 progress of the Hold interaction on Interact.
     public float InteractHoldProgress => interact.GetTimeoutCompletionPercentage();
     public bool ReloadPressed => reload != null && reload.WasPressedThisFrame();
+    public bool FlashlightPressed => flashlight != null && flashlight.WasPressedThisFrame();
 
     private void Awake()
     {
@@ -56,6 +59,7 @@ public class PlayerInputReader : MonoBehaviour
         sprint = map.FindAction(sprintActionName, throwIfNotFound: true);
         interact = map.FindAction(interactActionName, throwIfNotFound: true);
         reload = map.FindAction(reloadActionName);
+        flashlight = map.FindAction(flashlightActionName);
     }
 
     private void OnEnable() => map.Enable();

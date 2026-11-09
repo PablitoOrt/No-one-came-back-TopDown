@@ -10,18 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a1a8306917f0513469b7e7c2743f40a1, type: 3}
-  m_Name: ammo_fal
+  m_Name: bottle
   m_EditorClassIdentifier: NoOneCameBack.Inventory::NoOneCameBack.Inventory.ItemDefinition
-  id: ammo_fal
-  displayName: 7,62 x 51 mm OTAN
-  description: 
+  id: bottle
+  displayName: Bottle
+  description: Can be thrown as a distraction.
   icon: {fileID: 0}
-  category: 6
+  category: 3
   size: {x: 1, y: 1}
-  canRotate: 1
+  canRotate: 0
   maxStack: 1
   effects: []
-  consumeOnUse: 1
+  consumeOnUse: 0
   weapon: {fileID: 0}
   maxDurability: 0
-  worldPickupPrefab: {fileID: 3015403374823729792, guid: 0721ecf78ef25cd4ebead982177698d8, type: 3}
+  worldPickupPrefab: {fileID: 0}

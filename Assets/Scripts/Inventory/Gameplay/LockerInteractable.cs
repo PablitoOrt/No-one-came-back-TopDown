@@ -7,7 +7,7 @@ namespace NoOneCameBack.Inventory
     [RequireComponent(typeof(Collider))]
     public class LockerInteractable : MonoBehaviour, IInteractable
     {
-        [SerializeField] private string prompt = "Abrir casillero";
+        [SerializeField] private string prompt = "Open locker";
 
         public string InteractPrompt => prompt;
 

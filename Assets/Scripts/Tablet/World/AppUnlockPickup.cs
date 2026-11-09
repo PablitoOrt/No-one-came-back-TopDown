@@ -7,7 +7,7 @@ namespace NoOneCameBack.Tablet
     public class AppUnlockPickup : MonoBehaviour, IInteractable
     {
         [SerializeField] private string appId = "map";
-        [SerializeField] private string prompt = "Recoger planos";
+        [SerializeField] private string prompt = "Pick up blueprints";
         [SerializeField] private bool destroyOnPickup = true;
 
         public string InteractPrompt => prompt;

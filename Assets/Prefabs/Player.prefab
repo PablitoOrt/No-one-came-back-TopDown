@@ -105,8 +105,8 @@ MonoBehaviour:
   duration: 0.4
   amplitude: 12
   frequency: 40
-  noSpaceText: No tengo espacio.
-  noStorageText: "No tengo d\xF3nde guardarlo."
+  noSpaceText: I have no room for this.
+  noStorageText: I have nowhere to put this.
   messageDuration: 2
 --- !u!1 &263111356869463714
 GameObject:
@@ -173,7 +173,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: OBJETOS CLAVE
+  m_text: KEY ITEMS
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -378,7 +378,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "L\xFAcido"
+  m_text: Lucid
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -592,7 +592,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NoOneCameBack.Tablet.PlaceholderApp
   appId: objective
-  displayName: Objetivo
+  displayName: Objective
   icon: {fileID: 0}
   availableWhenBroken: 0
   unlockOnTabletFound: 1
@@ -661,7 +661,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Bien
+  m_text: Fine
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1004,7 +1004,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: SISTEMA
+  m_text: SYSTEM
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1141,7 +1141,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: CASILLERO
+  m_text: LOCKER
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1712,7 +1712,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: SALUD
+  m_text: HEALTH
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1836,7 +1836,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NoOneCameBack.Tablet.SystemApp
   appId: system
-  displayName: Sistema
+  displayName: System
   icon: {fileID: 0}
   availableWhenBroken: 1
   unlockOnTabletFound: 1
@@ -2330,7 +2330,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Mapa\n<size=60%>Pr\xF3ximamente</size>"
+  m_text: "Map\n<size=60%>Coming soon</size>"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -2748,7 +2748,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: MOCHILA
+  m_text: BACKPACK
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -2987,7 +2987,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NoOneCameBack.Tablet.PlaceholderApp
   appId: status
-  displayName: Estado
+  displayName: Status
   icon: {fileID: 0}
   availableWhenBroken: 0
   unlockOnTabletFound: 1
@@ -3091,7 +3091,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Opciones\n<size=60%>(pendiente de dise\xF1o)</size>"
+  m_text: "Options\n<size=60%>(design pending)</size>"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -3213,7 +3213,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NoOneCameBack.Tablet.PlaceholderApp
   appId: bestiary
-  displayName: Bestiario
+  displayName: Bestiary
   icon: {fileID: 0}
   availableWhenBroken: 0
   unlockOnTabletFound: 1
@@ -3282,7 +3282,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "SE\xD1AL DA\xD1ADA \u2014 SOLO SISTEMA"
+  m_text: "SIGNAL DAMAGED \u2014 SYSTEM ONLY"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -3903,7 +3903,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Inventario
+  m_text: Inventory
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -4579,7 +4579,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: MENTE
+  m_text: MIND
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -5120,7 +5120,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Bestiario\n<size=60%>Pr\xF3ximamente</size>"
+  m_text: "Bestiary\n<size=60%>Coming soon</size>"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -5876,7 +5876,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NoOneCameBack.Tablet.PlaceholderApp
   appId: map
-  displayName: Mapa
+  displayName: Map
   icon: {fileID: 0}
   availableWhenBroken: 0
   unlockOnTabletFound: 0
@@ -5985,7 +5985,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Sin objetos clave
+  m_text: No key items
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -6342,7 +6342,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NoOneCameBack.Inventory.InventoryApp
   appId: inventory
-  displayName: Inventario
+  displayName: Inventory
   icon: {fileID: 0}
   availableWhenBroken: 0
   unlockOnTabletFound: 1
@@ -6356,12 +6356,12 @@ MonoBehaviour:
   infoPanel: {fileID: 4149925296557935398}
   contextMenu: {fileID: 1316207449864935754}
   statusStrip: {fileID: 6519715257170433954}
-  useLabel: Usar
-  equipLabel: Equipar
-  unequipLabel: Desequipar
-  dropLabel: Soltar
-  examineLabel: Examinar
-  cannotUseMessage: No lo necesito ahora.
+  useLabel: Use
+  equipLabel: Equip
+  unequipLabel: Unequip
+  dropLabel: Drop
+  examineLabel: Examine
+  cannotUseMessage: I don't need this right now.
 --- !u!1 &8986632458130766294
 GameObject:
   m_ObjectHideFlags: 0
@@ -6427,7 +6427,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Estado\n<size=60%>Pr\xF3ximamente</size>"
+  m_text: "Status\n<size=60%>Coming soon</size>"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -6594,18 +6594,18 @@ MonoBehaviour:
   healthLabel: {fileID: 2233983554036186283}
   mindLabel: {fileID: 455683911419888758}
   injuredThreshold: 0.6
-  healthyText: Bien
-  injuredText: Herido
-  bleedingSuffix: ' (sangrando)'
+  healthyText: Fine
+  injuredText: Injured
+  bleedingSuffix: ' (bleeding)'
   mindLevels:
   - minPsychosis: 0
-    text: "L\xFAcido"
+    text: Lucid
   - minPsychosis: 0.25
-    text: Inquieto
+    text: Uneasy
   - minPsychosis: 0.5
-    text: Perturbado
+    text: Disturbed
   - minPsychosis: 0.75
-    text: Al borde
+    text: On the edge
 --- !u!1 &9187506172398628754
 GameObject:
   m_ObjectHideFlags: 0
@@ -6671,7 +6671,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Objetivo\n<size=60%>Pr\xF3ximamente</size>"
+  m_text: "Objective\n<size=60%>Coming soon</size>"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

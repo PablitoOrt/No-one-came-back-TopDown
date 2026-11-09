@@ -48,12 +48,12 @@ namespace NoOneCameBack.Inventory
         [SerializeField] private StatusStripView statusStrip;
 
         [Header("Text")]
-        [SerializeField] private string useLabel = "Usar";
-        [SerializeField] private string equipLabel = "Equipar";
-        [SerializeField] private string unequipLabel = "Desequipar";
-        [SerializeField] private string dropLabel = "Soltar";
-        [SerializeField] private string examineLabel = "Examinar";
-        [SerializeField] private string cannotUseMessage = "No lo necesito ahora.";
+        [SerializeField] private string useLabel = "Use";
+        [SerializeField] private string equipLabel = "Equip";
+        [SerializeField] private string unequipLabel = "Unequip";
+        [SerializeField] private string dropLabel = "Drop";
+        [SerializeField] private string examineLabel = "Examine";
+        [SerializeField] private string cannotUseMessage = "I don't need this right now.";
 
         private readonly List<ItemAction> menuActions = new List<ItemAction>();
         private readonly List<string> menuLabels = new List<string>();

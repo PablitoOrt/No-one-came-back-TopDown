@@ -10,18 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a1a8306917f0513469b7e7c2743f40a1, type: 3}
-  m_Name: ammo_pistol
+  m_Name: ammo_fal
   m_EditorClassIdentifier: NoOneCameBack.Inventory::NoOneCameBack.Inventory.ItemDefinition
-  id: ammo_pistol
-  displayName: "Munici\xF3n de pistola"
-  description: Balas de 9 mm.
+  id: ammo_fal
+  displayName: 7.62x51mm NATO
+  description: 
   icon: {fileID: 0}
-  category: 1
+  category: 6
   size: {x: 1, y: 1}
   canRotate: 1
-  maxStack: 30
+  maxStack: 1
   effects: []
   consumeOnUse: 1
   weapon: {fileID: 0}
   maxDurability: 0
-  worldPickupPrefab: {fileID: 0}
+  worldPickupPrefab: {fileID: 3015403374823729792, guid: 0721ecf78ef25cd4ebead982177698d8, type: 3}

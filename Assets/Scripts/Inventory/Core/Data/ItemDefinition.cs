@@ -29,6 +29,10 @@ namespace NoOneCameBack.Inventory
         [Tooltip("Combat asset equipped with this item (FirearmDefinition or MeleeDefinition). Its ammo item and magazine size are used by the inventory too.")]
         [SerializeField] private ScriptableObject weapon;
 
+        [Header("Equipment")]
+        [Tooltip("Non-weapon asset used while equipped, e.g. FlashlightDefinition. Needs the Tool category.")]
+        [SerializeField] private ScriptableObject equipment;
+
         [Header("Durability")]
         [Tooltip("0 = indestructible. Melee weapons and silencers wear out.")]
         [SerializeField, Min(0)] private int maxDurability;
@@ -57,13 +61,15 @@ namespace NoOneCameBack.Inventory
         public int MagazineCapacity => weapon is IWeaponData data ? data.MagazineCapacity : 0;
         public bool HasMagazine => MagazineCapacity > 0;
 
+        public ScriptableObject Equipment => equipment;
+
         public int MaxDurability => maxDurability;
         public bool HasDurability => maxDurability > 0;
 
         public GameObject WorldPickupPrefab => worldPickupPrefab;
 
         public bool UsesGrid => category != ItemCategory.Key && category != ItemCategory.Anchor;
-        public bool IsEquippable => category == ItemCategory.Weapon || category == ItemCategory.Throwable;
+        public bool IsEquippable => category == ItemCategory.Weapon || category == ItemCategory.Throwable || category == ItemCategory.Tool;
 
         public Vector2Int GetSize(bool rotated)
         {

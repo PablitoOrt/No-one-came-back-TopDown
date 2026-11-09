@@ -19,8 +19,8 @@ namespace NoOneCameBack.Inventory
         [SerializeField, Min(0f)] private float frequency = 40f;
 
         [Header("Text")]
-        [SerializeField] private string noSpaceText = "No tengo espacio.";
-        [SerializeField] private string noStorageText = "No tengo dónde guardarlo.";
+        [SerializeField] private string noSpaceText = "I have no room for this.";
+        [SerializeField] private string noStorageText = "I have nowhere to put this.";
         [SerializeField, Min(0f)] private float messageDuration = 2f;
 
         private Vector2 restPosition;

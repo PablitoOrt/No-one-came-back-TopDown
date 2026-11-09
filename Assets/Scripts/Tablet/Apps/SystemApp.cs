@@ -5,7 +5,7 @@ namespace NoOneCameBack.Tablet
 {
     public class SystemApp : TabletApp
     {
-        private static readonly string[] Options = { "Continuar", "Opciones", "Salir al menú", "Salir del juego" };
+        private static readonly string[] Options = { "Continue", "Options", "Quit to Menu", "Quit Game" };
 
         [SerializeField] private MenuListView menu;
         // TODO(diseño): options screen content (volume, controls, brightness...).

@@ -39,10 +39,10 @@ namespace NoOneCameBack.Inventory
             if (descriptionLabel != null) descriptionLabel.text = definition.Description;
 
             details.Clear();
-            if (definition.IsStackable) details.AppendLine($"Cantidad: {item.Quantity}/{definition.MaxStack}");
-            if (definition.HasMagazine) details.AppendLine($"Cargador: {item.LoadedAmmo}/{definition.MagazineCapacity}");
-            if (definition.HasDurability) details.AppendLine($"Durabilidad: {item.Durability}/{definition.MaxDurability}");
-            if (equipped) details.AppendLine("Equipado");
+            if (definition.IsStackable) details.AppendLine($"Quantity: {item.Quantity}/{definition.MaxStack}");
+            if (definition.HasMagazine) details.AppendLine($"Magazine: {item.LoadedAmmo}/{definition.MagazineCapacity}");
+            if (definition.HasDurability) details.AppendLine($"Durability: {item.Durability}/{definition.MaxDurability}");
+            if (equipped) details.AppendLine("Equipped");
             if (detailsLabel != null) detailsLabel.text = details.ToString();
         }
 

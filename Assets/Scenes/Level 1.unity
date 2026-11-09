@@ -4930,7 +4930,7 @@ Transform:
   m_GameObject: {fileID: 670772196}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -25.5, y: 3.3, z: 24.71}
+  m_LocalPosition: {x: -18.62, y: 3.3, z: 20.02}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7061,7 +7061,7 @@ MeshCollider:
   serializedVersion: 5
   m_Convex: 0
   m_CookingOptions: 30
-  m_Mesh: {fileID: 10914405}
+  m_Mesh: {fileID: 1745093259}
 --- !u!33 &1136704280
 MeshFilter:
   m_ObjectHideFlags: 10
@@ -10628,13 +10628,45 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3038848244883620822, guid: 3a9809c97b0f72449a7d30bee94fd264, type: 3}
+      propertyPath: useLabel
+      value: Use
+      objectReference: {fileID: 0}
+    - target: {fileID: 3038848244883620822, guid: 3a9809c97b0f72449a7d30bee94fd264, type: 3}
+      propertyPath: dropLabel
+      value: Drop
+      objectReference: {fileID: 0}
+    - target: {fileID: 3038848244883620822, guid: 3a9809c97b0f72449a7d30bee94fd264, type: 3}
+      propertyPath: equipLabel
+      value: Equip
+      objectReference: {fileID: 0}
+    - target: {fileID: 3038848244883620822, guid: 3a9809c97b0f72449a7d30bee94fd264, type: 3}
+      propertyPath: examineLabel
+      value: Check
+      objectReference: {fileID: 0}
+    - target: {fileID: 3038848244883620822, guid: 3a9809c97b0f72449a7d30bee94fd264, type: 3}
+      propertyPath: unequipLabel
+      value: Unequip
+      objectReference: {fileID: 0}
+    - target: {fileID: 3038848244883620822, guid: 3a9809c97b0f72449a7d30bee94fd264, type: 3}
+      propertyPath: cannotUseMessage
+      value: I cant not use this
+      objectReference: {fileID: 0}
     - target: {fileID: 3263290726279871659, guid: 3a9809c97b0f72449a7d30bee94fd264, type: 3}
       propertyPath: movementCamera
       value: 
       objectReference: {fileID: 1996980336}
+    - target: {fileID: 6519715257170433954, guid: 3a9809c97b0f72449a7d30bee94fd264, type: 3}
+      propertyPath: healthyText
+      value: Ok
+      objectReference: {fileID: 0}
     - target: {fileID: 6559481588968213313, guid: 3a9809c97b0f72449a7d30bee94fd264, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 6616036593525028649, guid: 3a9809c97b0f72449a7d30bee94fd264, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6626731061238617312, guid: 3a9809c97b0f72449a7d30bee94fd264, type: 3}
       propertyPath: interactArea

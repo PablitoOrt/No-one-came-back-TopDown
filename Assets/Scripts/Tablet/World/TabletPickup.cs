@@ -5,7 +5,7 @@ namespace NoOneCameBack.Tablet
     [RequireComponent(typeof(Collider))]
     public class TabletPickup : MonoBehaviour, IInteractable
     {
-        [SerializeField] private string prompt = "Recoger tablet";
+        [SerializeField] private string prompt = "Pick up tablet";
 
         public string InteractPrompt => prompt;
 

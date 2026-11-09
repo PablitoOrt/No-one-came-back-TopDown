@@ -20,18 +20,18 @@ namespace NoOneCameBack.Inventory
         [Header("Health")]
         // TODO(diseño): health fraction under which the player reads as injured.
         [SerializeField, Range(0f, 1f)] private float injuredThreshold = 0.6f;
-        [SerializeField] private string healthyText = "Bien";
-        [SerializeField] private string injuredText = "Herido";
-        [SerializeField] private string bleedingSuffix = " (sangrando)";
+        [SerializeField] private string healthyText = "Fine";
+        [SerializeField] private string injuredText = "Injured";
+        [SerializeField] private string bleedingSuffix = " (bleeding)";
 
         [Header("Mind")]
         // TODO(diseño): psychosis thresholds and wording.
         [SerializeField] private List<MindLevel> mindLevels = new List<MindLevel>
         {
-            new MindLevel { minPsychosis = 0f, text = "Lúcido" },
-            new MindLevel { minPsychosis = 0.25f, text = "Inquieto" },
-            new MindLevel { minPsychosis = 0.5f, text = "Perturbado" },
-            new MindLevel { minPsychosis = 0.75f, text = "Al borde" },
+            new MindLevel { minPsychosis = 0f, text = "Lucid" },
+            new MindLevel { minPsychosis = 0.25f, text = "Uneasy" },
+            new MindLevel { minPsychosis = 0.5f, text = "Disturbed" },
+            new MindLevel { minPsychosis = 0.75f, text = "On the edge" },
         };
 
         private IHealth health;
